@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"math/rand"
@@ -44,17 +45,24 @@ func (a ByWidthHeight) Less(i, j int) bool {
 
 // Provides standard string formatting for roll
 func (r Roll) String() string {
-	text := "Rolling and...\n"
+	text := "\nRolling and...\n\n"
 
-	text += fmt.Sprintf("Dice show: %d\n", r.results)
+	text += fmt.Sprintf("Dice show: %d\n\n", r.results)
 
-	sort.Sort(ByWidthHeight(r.matches))
-	for _, m := range r.matches {
-		text += fmt.Sprintf("%dx%d\n", m.width, m.height)
+	if len(r.matches) > 0 {
+		sort.Sort(ByWidthHeight(r.matches))
+
+		text += "Matches:\n"
+
+		for _, m := range r.matches {
+			text += fmt.Sprintf("%dx%d\n", m.width, m.height)
+		}
+	} else {
+		text += "No matches\n"
 	}
 
 	if len(r.loose) > 0 {
-		text += fmt.Sprintf("Loose dice %d\n", r.loose)
+		text += fmt.Sprintf("\nLoose dice %d\n", r.loose)
 	}
 
 	if r.wiggles > 0 {
@@ -78,8 +86,12 @@ func RollDie(max, min, numDice int) int {
 }
 
 // Resolve ORE dice roll and prints results
-func (r *Roll) Resolve(input string) {
-	nd, hd, wd := parseString(input)
+func (r *Roll) Resolve(input string) (*Roll, error) {
+	nd, hd, wd, err := parseString(input)
+
+	if err != nil {
+		return r, err
+	}
 
 	r.wiggles = wd
 
@@ -93,19 +105,18 @@ func (r *Roll) Resolve(input string) {
 
 	r.parseDieRoll()
 
-	if r.matches != nil || r.wiggles != 0 {
-		fmt.Println(r)
-	} else {
-		fmt.Println("No matches!")
-	}
+	return r, nil
+
 }
 
 // parses string like 5d+1hd+1wd or returns error
-func parseString(input string) (int, int, int) {
+func parseString(input string) (int, int, int, error) {
 
 	re := regexp.MustCompile("[0-9]+")
 
 	var dieTypes []string
+
+	errString := ""
 
 	dieTypes = strings.SplitN(input, "+", 3)
 
@@ -126,15 +137,19 @@ func parseString(input string) (int, int, int) {
 			nd, _ = strconv.Atoi(numString)
 
 		default:
-			panic("Not a regular die notation")
+			errString = "Error: Not a regular die notation"
 		}
 	}
 
 	if nd+hd+wd > 10 {
-		panic("Can't roll more than 10 dice.")
+		errString = "Error: Can't roll more than 10 dice."
 	}
 
-	return nd, hd, wd
+	if errString != "" {
+		return 0, 0, 0, errors.New(errString)
+	}
+
+	return nd, hd, wd, nil
 }
 
 func (r *Roll) parseDieRoll() *Roll {
@@ -162,12 +177,18 @@ func main() {
 
 	diePool := flag.String("d", "4d", "a die string separated by + like 4d+2hd+1wd")
 	numRolls := flag.Int("n", 1, "an int that represents the number of rolls to make")
+	guiOn := flag.Bool("w", false, "Set whether to use the GUI or not (CLI).")
 
 	flag.Parse()
 
-	for x := 0; x < *numRolls; x++ {
-		roll := Roll{}
-		roll.Resolve(*diePool)
-	}
+	if *guiOn == true {
+		GUI()
+	} else {
 
+		for x := 0; x < *numRolls; x++ {
+			roll := Roll{}
+			roll.Resolve(*diePool)
+			fmt.Println(roll)
+		}
+	}
 }
