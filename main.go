@@ -45,7 +45,7 @@ func (a ByWidthHeight) Less(i, j int) bool {
 
 // Provides standard string formatting for roll
 func (r Roll) String() string {
-	text := "\nRolling and...\n\n"
+	text := ""
 
 	text += fmt.Sprintf("Dice show: %d\n\n", r.results)
 
@@ -68,7 +68,7 @@ func (r Roll) String() string {
 	if r.wiggles > 0 {
 		text += fmt.Sprintf("%d wiggle dice\n", r.wiggles)
 	}
-	return text
+	return text + "\n"
 }
 
 // RollDie rolls and sum dice
