@@ -61,13 +61,14 @@ func (r Roll) String() string {
 		text += "No matches\n"
 	}
 
+	if r.wiggles > 0 {
+		text += fmt.Sprintf("+%d wiggle dice\n", r.wiggles)
+	}
+
 	if len(r.loose) > 0 {
 		text += fmt.Sprintf("\nLoose dice %d\n", r.loose)
 	}
 
-	if r.wiggles > 0 {
-		text += fmt.Sprintf("%d wiggle dice\n", r.wiggles)
-	}
 	return text + "\n"
 }
 
@@ -177,7 +178,7 @@ func main() {
 
 	diePool := flag.String("d", "4d", "a die string separated by + like 4d+2hd+1wd")
 	numRolls := flag.Int("n", 1, "an int that represents the number of rolls to make")
-	guiOn := flag.Bool("w", false, "Set whether to use the GUI or not (CLI).")
+	guiOn := flag.Bool("w", true, "Set whether to use the GUI or not (CLI).")
 
 	flag.Parse()
 
