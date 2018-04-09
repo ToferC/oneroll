@@ -11,3 +11,5 @@ This is... complicated to run.
 The Golang app is a simple app that uses a GUI or CLI interface and parses a string like "5d+1hd+2wd", rolls the dice and displays the results.
 
 The UI uses "github.com/andlab/ui" and you'll need to install its dependencies.
+
+![screenshot]ToferC.github.com/ore_rpg_roller/ORE_roller.png)
