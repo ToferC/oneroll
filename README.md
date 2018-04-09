@@ -12,4 +12,4 @@ The Golang app is a simple app that uses a GUI or CLI interface and parses a str
 
 The UI uses "github.com/andlab/ui" and you'll need to install its dependencies.
 
-![screenshot](ToferC.github.com/ore_rpg_roller/ORE_roller.png)
+![screenshot](https://github.com/ToferC/ore_rpg_roller/blob/master/ORE%20roller.png)
