@@ -1,4 +1,4 @@
-package main
+package oneroll
 
 import (
 	"errors"
@@ -142,15 +142,48 @@ func parseString(input string) (int, int, int, error) {
 		}
 	}
 
-	if nd+hd+wd > 10 {
-		errString = "Error: Can't roll more than 10 dice."
-	}
+	nd, hd, wd = verifyLessThan10(nd, hd, wd)
 
 	if errString != "" {
 		return 0, 0, 0, errors.New(errString)
 	}
 
 	return nd, hd, wd, nil
+}
+
+func verifyLessThan10(nd, hd, wd int) (int, int, int) {
+
+	if nd+hd+wd > 10 {
+
+		fmt.Println("Error: Can't roll more than 10 dice. Reducing to less than 10.")
+		fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd.\n", nd, hd, wd))
+
+		// Remove normal dice first
+		for nd > 0 && nd+hd+wd > 10 {
+			fmt.Printf("reduced Normal dice from %d to %d. \n", nd, nd-1)
+			nd--
+			fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd.\n", nd, hd, wd))
+		}
+
+		// Reduce hard dice next
+		for hd > 0 && nd+hd+wd > 10 {
+			fmt.Printf("reduced Hard dice from %d to %d. \n", hd, hd-1)
+			hd--
+			fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd.\n", nd, hd, wd))
+		}
+
+		// Reduce wiggle dice last
+		for wd > 0 && nd+hd+wd > 10 {
+			fmt.Printf("reduced Wiggle dice from %d to %d. \n", wd, wd-1)
+			wd--
+			fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd.\n", nd, hd, wd))
+		}
+
+		return nd, hd, wd
+
+	}
+
+	return nd, hd, wd
 }
 
 func (r *Roll) parseDieRoll() *Roll {
