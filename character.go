@@ -25,13 +25,6 @@ type Character struct {
 	PointCost    int
 }
 
-// DiePool represents a rollable dice set in ORE
-type DiePool struct {
-	Normal int
-	Hard   int
-	Wiggle int
-}
-
 // Statistic represents common attributes possessed by every character
 type Statistic struct {
 	Name    string
@@ -152,17 +145,18 @@ type Location struct {
 }
 
 // NewCharacter generates an ORE character
-func NewCharacter() *Character {
+func NewCharacter(name string) *Character {
 
 	c := Character{
-		Name: "Baron",
+		Name: name,
 	}
 
 	c.Body = &Statistic{
 		Name: "Body",
 		Dice: &DiePool{
-			Normal: 4,
-			Hard:   0,
+			Normal:  2,
+			Hard:    0,
+			GoFirst: 1,
 		},
 	}
 
@@ -216,8 +210,8 @@ func NewCharacter() *Character {
 			LinkStat: c.Body,
 			Dice: &DiePool{
 				Normal: 3,
-				Hard:   2,
-				Wiggle: 4,
+				Hard:   0,
+				Wiggle: 0,
 			},
 		},
 		"SmallArms": &Skill{
@@ -256,24 +250,14 @@ func (c *Character) Display() {
 		c.Mind, c.Command, c.Charm}
 
 	for _, stat := range stats {
-		text := fmt.Sprintf("%dd+%dhd+%dwd", stat.Dice.Normal, stat.Dice.Hard, stat.Dice.Wiggle)
+		text := fmt.Sprintf("%dd+%dhd+%dwd+%dgf+%dsp", stat.Dice.Normal, stat.Dice.Hard, stat.Dice.Wiggle,
+			stat.Dice.GoFirst, stat.Dice.Spray)
 		fmt.Printf("%s: %s\n", stat.Name, text)
 	}
 	for _, loc := range c.HitLocations {
 		fmt.Println(loc)
 	}
 	for _, skill := range c.Skills {
-		fmt.Println(skill.Name, FormDieString(skill.LinkStat, skill))
+		fmt.Println(skill.Name, FormSkillDieString(skill))
 	}
-}
-
-// FormDieString takes a stat and skill and creates a die pool string
-func FormDieString(stat *Statistic, skill *Skill) string {
-	normal := stat.Dice.Normal + skill.Dice.Normal
-	hard := stat.Dice.Hard + skill.Dice.Hard
-	wiggle := stat.Dice.Wiggle + skill.Dice.Wiggle
-
-	text := fmt.Sprintf("%dd+%dhd+%dwd", normal, hard, wiggle)
-
-	return text
 }

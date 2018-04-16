@@ -30,15 +30,19 @@ func GUI() {
 		hdInput := ui.NewEntry()
 		wdInput := ui.NewEntry()
 		numInput := ui.NewEntry()
+		goFirstInput := ui.NewEntry()
+		sprayInput := ui.NewEntry()
 		button := ui.NewButton("Roll")
 		results := ui.NewLabel("")
 		box := ui.NewVerticalBox()
 		rowD := ui.NewHorizontalBox()
 		rowHD := ui.NewHorizontalBox()
 		rowWD := ui.NewHorizontalBox()
+		rowGF := ui.NewHorizontalBox()
+		rowSp := ui.NewHorizontalBox()
 		rowNum := ui.NewHorizontalBox()
 
-		box.Append(ui.NewLabel("Set your ORE Dice Pool\n"), false)
+		box.Append(ui.NewLabel("Build your ORE Dice Pool\n"), false)
 		box.Append(ui.NewHorizontalSeparator(), false)
 
 		rowD.Append(ndInput, false)
@@ -54,10 +58,18 @@ func GUI() {
 		box.Append(ui.NewHorizontalSeparator(), false)
 		box.Append(ui.NewLabel(""), false)
 
+		rowGF.Append(goFirstInput, false)
+		rowGF.Append(ui.NewLabel(" Go First Levels"), false)
+
+		rowSp.Append(sprayInput, false)
+		rowSp.Append(ui.NewLabel(" Spray Levels"), false)
+
 		rowNum.Append(numInput, false)
 		rowNum.Append(ui.NewLabel(" Number of Rolls"), false)
 
 		box.Append(ui.NewHorizontalSeparator(), false)
+		box.Append(rowGF, false)
+		box.Append(rowSp, false)
 		box.Append(rowNum, false)
 		box.Append(button, false)
 		box.Append(results, false)
@@ -70,6 +82,10 @@ func GUI() {
 
 			var resultString string
 
+			c := Character{
+				Name: "Player",
+			}
+
 			numRolls, err := parseNumRolls(numInput.Text())
 
 			if err != nil {
@@ -78,10 +94,20 @@ func GUI() {
 
 			for x := 1; x < numRolls+1; x++ {
 
-				resultString += fmt.Sprintf("Roll #%d\n\n", x)
+				resultString += fmt.Sprintf("Roll #%d\n", x)
 
-				roll := Roll{}
-				text := fmt.Sprintf("%sd+%shd+%swd", ndInput.Text(), hdInput.Text(), wdInput.Text())
+				roll := Roll{
+					Actor:  &c,
+					Action: "Act",
+				}
+
+				text := fmt.Sprintf("%sd+%shd+%swd+%sgf+%ssp",
+					ndInput.Text(),
+					hdInput.Text(),
+					wdInput.Text(),
+					goFirstInput.Text(),
+					sprayInput.Text(),
+				)
 
 				r, err := roll.Resolve(text)
 
