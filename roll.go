@@ -205,15 +205,12 @@ func (r Roll) String() string {
 	text := ""
 	var results []Match
 
-	text += fmt.Sprintf("Actor: %s, Action: %s, Go First: %d, Spray: %d, Wiggle Dice: %dwd\n\n",
+	text += fmt.Sprintf("Actor: %s, Action: %s, Go First: %d, Spray: %d\n\n",
 		r.Actor.Name,
 		r.Action,
 		r.DiePool.GoFirst,
 		r.DiePool.Spray,
-		r.wiggles,
 	)
-
-	text += fmt.Sprintf("Dice show: %d\n\n", r.results)
 
 	if len(r.matches) > 0 {
 
@@ -226,14 +223,21 @@ func (r Roll) String() string {
 	}
 
 	text += fmt.Sprintln("***Resolution***")
-
 	text += fmt.Sprintf("%s Actions: %d\n", r.Actor.Name, r.numActions)
+
+	rs := fmt.Sprintf("%d", r.results)
+	rs = strings.Trim(rs, "[]")
+
+	text += fmt.Sprintf("Dice show: %s\n\n", rs)
 
 	for _, m := range results {
 		text += fmt.Sprintf("Match: %dx%d, Initiative: %dx%d\n",
 			m.height, m.width,
 			m.height, m.initiative,
 		)
+	}
+	if r.wiggles > 0 {
+		text += fmt.Sprintf("+%d wiggle dice\n", r.wiggles)
 	}
 
 	if len(r.loose) > 0 {

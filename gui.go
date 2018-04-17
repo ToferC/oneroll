@@ -32,6 +32,7 @@ func GUI() {
 		numInput := ui.NewEntry()
 		goFirstInput := ui.NewEntry()
 		sprayInput := ui.NewEntry()
+		acInput := ui.NewEntry()
 		button := ui.NewButton("Roll")
 		results := ui.NewLabel("")
 		box := ui.NewVerticalBox()
@@ -41,6 +42,7 @@ func GUI() {
 		rowGF := ui.NewHorizontalBox()
 		rowSp := ui.NewHorizontalBox()
 		rowNum := ui.NewHorizontalBox()
+		rowAc := ui.NewHorizontalBox()
 
 		box.Append(ui.NewLabel("Build your ORE Dice Pool\n"), false)
 		box.Append(ui.NewHorizontalSeparator(), false)
@@ -67,9 +69,13 @@ func GUI() {
 		rowNum.Append(numInput, false)
 		rowNum.Append(ui.NewLabel(" Number of Rolls"), false)
 
+		rowAc.Append(acInput, false)
+		rowAc.Append(ui.NewLabel(" Number of Actions"), false)
+
 		box.Append(ui.NewHorizontalSeparator(), false)
 		box.Append(rowGF, false)
 		box.Append(rowSp, false)
+		box.Append(rowAc, false)
 		box.Append(rowNum, false)
 		box.Append(button, false)
 		box.Append(results, false)
@@ -101,7 +107,8 @@ func GUI() {
 					Action: "Act",
 				}
 
-				text := fmt.Sprintf("%sd+%shd+%swd+%sgf+%ssp",
+				text := fmt.Sprintf("%sac+%sd+%shd+%swd+%sgf+%ssp",
+					acInput.Text(),
 					ndInput.Text(),
 					hdInput.Text(),
 					wdInput.Text(),
