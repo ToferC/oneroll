@@ -6,7 +6,7 @@ import (
 )
 
 // FormDieString takes a stat and skill and creates a die pool string
-func FormSkillDieString(skill *Skill) string {
+func FormSkillDieString(skill *Skill, actions int) string {
 
 	normal := skill.LinkStat.Dice.Normal + skill.Dice.Normal
 	hard := skill.LinkStat.Dice.Hard + skill.Dice.Hard
@@ -14,7 +14,13 @@ func FormSkillDieString(skill *Skill) string {
 	goFirst := Max(skill.LinkStat.Dice.GoFirst, skill.Dice.GoFirst)
 	spray := Max(skill.LinkStat.Dice.Spray, skill.Dice.Spray)
 
-	text := fmt.Sprintf("%dd+%dhd+%dwd+%dgf+%dsp", normal, hard, wiggle, goFirst, spray)
+	text := fmt.Sprintf("%dac+%dd+%dhd+%dwd+%dgf+%dsp",
+		actions,
+		normal,
+		hard,
+		wiggle,
+		goFirst,
+		spray)
 
 	return text
 }
@@ -54,12 +60,4 @@ func OpposedRoll(rolls ...*Roll) {
 			m.height, m.initiative,
 		)
 	}
-
-}
-
-func Max(x, y int) int {
-	if x > y {
-		return x
-	}
-	return y
 }

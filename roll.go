@@ -4,12 +4,10 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"math/rand"
 	"regexp"
 	"sort"
 	"strconv"
 	"strings"
-	"time"
 )
 
 // Roll shows all results and variables from an ORE roll
@@ -58,68 +56,12 @@ func (a ByWidthHeight) Less(i, j int) bool {
 	return a[i].height > a[j].height
 }
 
-// Provides standard string formatting for roll
-func (r Roll) String() string {
-
-	text := ""
-	var results []Match
-
-	text += fmt.Sprintf("Actor: %s, Action: %s, Go First: %d, Spray: %d, Wiggle Dice: %dwd\n\n",
-		r.Actor.Name,
-		r.Action,
-		r.DiePool.GoFirst,
-		r.DiePool.Spray,
-		r.wiggles,
-	)
-
-	text += fmt.Sprintf("Dice show: %d\n\n", r.results)
-
-	if len(r.matches) > 0 {
-
-		text += "Matches:\n"
-
-		for _, m := range r.matches {
-			results = append(results, m)
-		}
-		sort.Sort(ByWidthHeight(results))
-	}
-
-	fmt.Println("***Resolution***")
-
-	for i, m := range results {
-		text += fmt.Sprintf("***ACTION %d: Actor: %s, Match: %dx%d, Initiative: %dx%d\n",
-			i+1,
-			m.Actor.Name,
-			m.height, m.width,
-			m.height, m.initiative,
-		)
-	}
-
-	if len(r.loose) > 0 {
-		text += fmt.Sprintf("\nLoose dice %d\n", r.loose)
-	}
-
-	return text + "\n"
-}
-
-// RollDie rolls and sum dice
-func RollDie(max, min, numDice int) int {
-
-	s1 := rand.NewSource(time.Now().UnixNano())
-	r1 := rand.New(s1)
-
-	result := 0
-	for i := 1; i < numDice+1; i++ {
-		roll := r1.Intn(max+1-min) + min
-		result += roll
-	}
-	return result
-}
-
 // Resolve ORE dice roll and prints results
 func (r *Roll) Resolve(input string) (*Roll, error) {
 
-	nd, hd, wd, gf, sp, err := r.parseString(input)
+	nd, hd, wd, gf, sp, ac, err := r.parseString(input)
+
+	r.numActions = ac
 
 	r.DiePool = &DiePool{
 		Normal:  nd,
@@ -153,7 +95,7 @@ func (r *Roll) Resolve(input string) (*Roll, error) {
 }
 
 // parses string like 5d+1hd+1wd or returns error
-func (r *Roll) parseString(input string) (int, int, int, int, int, error) {
+func (r *Roll) parseString(input string) (int, int, int, int, int, int, error) {
 
 	re := regexp.MustCompile("[0-9]+")
 
@@ -161,9 +103,11 @@ func (r *Roll) parseString(input string) (int, int, int, int, int, error) {
 
 	errString := ""
 
-	sElements = strings.SplitN(input, "+", 5)
+	sElements = strings.SplitN(input, "+", 6)
 
 	var nd, hd, wd, gf, sp int
+
+	ac := 1
 
 	for _, s := range sElements {
 		switch {
@@ -186,19 +130,44 @@ func (r *Roll) parseString(input string) (int, int, int, int, int, error) {
 		case strings.Contains(s, "sp"):
 			numString := re.FindString(s)
 			sp, _ = strconv.Atoi(numString)
+			nd += sp
+
+		case strings.Contains(s, "ac"):
+			numString := re.FindString(s)
+			ac, _ = strconv.Atoi(numString)
 
 		default:
 			errString = "Error: Not a regular die notation"
 		}
 	}
 
-	nd, hd, wd = verifyLessThan10(nd, hd, wd)
+	actionCount := ac // Disposable counter
 
-	if errString != "" {
-		return 0, 0, 0, 0, 0, errors.New(errString)
+	// Check for multiple actions and spray
+	// reduce die pool
+	if actionCount > 1 && sp == 0 {
+		// Remove hd first
+		for hd > 0 && actionCount > 1 {
+			hd--
+			actionCount--
+		}
+		for nd > 0 && actionCount > 1 {
+			nd--
+			actionCount--
+		}
+		for wd > 0 && actionCount > 1 {
+			wd--
+			actionCount--
+		}
 	}
 
-	return nd, hd, wd, gf, sp, nil
+	nd, hd, wd = VerifyLessThan10(nd, hd, wd)
+
+	if errString != "" {
+		return 0, 0, 0, 0, 0, 0, errors.New(errString)
+	}
+
+	return nd, hd, wd, gf, sp, ac, nil
 }
 
 // Determine matches including width, height and initiative for a roll
@@ -230,39 +199,48 @@ func (r *Roll) parseDieRoll() *Roll {
 	return r
 }
 
-func verifyLessThan10(nd, hd, wd int) (int, int, int) {
+// Provides standard string formatting for roll
+func (r Roll) String() string {
 
-	if nd+hd+wd > 10 {
+	text := ""
+	var results []Match
 
-		fmt.Println("Error: Can't roll more than 10 dice. Reducing to less than 10.")
-		fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd.\n", nd, hd, wd))
+	text += fmt.Sprintf("Actor: %s, Action: %s, Go First: %d, Spray: %d, Wiggle Dice: %dwd\n\n",
+		r.Actor.Name,
+		r.Action,
+		r.DiePool.GoFirst,
+		r.DiePool.Spray,
+		r.wiggles,
+	)
 
-		// Remove normal dice first
-		for nd > 0 && nd+hd+wd > 10 {
-			fmt.Printf("reduced Normal dice from %d to %d. \n", nd, nd-1)
-			nd--
-			fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd.\n", nd, hd, wd))
+	text += fmt.Sprintf("Dice show: %d\n\n", r.results)
+
+	if len(r.matches) > 0 {
+
+		text += "Matches:\n"
+
+		for _, m := range r.matches {
+			results = append(results, m)
 		}
-
-		// Reduce hard dice next
-		for hd > 0 && nd+hd+wd > 10 {
-			fmt.Printf("reduced Hard dice from %d to %d. \n", hd, hd-1)
-			hd--
-			fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd.\n", nd, hd, wd))
-		}
-
-		// Reduce wiggle dice last
-		for wd > 0 && nd+hd+wd > 10 {
-			fmt.Printf("reduced Wiggle dice from %d to %d. \n", wd, wd-1)
-			wd--
-			fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd.\n", nd, hd, wd))
-		}
-
-		return nd, hd, wd
-
+		sort.Sort(ByWidthHeight(results))
 	}
 
-	return nd, hd, wd
+	text += fmt.Sprintln("***Resolution***")
+
+	text += fmt.Sprintf("%s Actions: %d\n", r.Actor.Name, r.numActions)
+
+	for _, m := range results {
+		text += fmt.Sprintf("Match: %dx%d, Initiative: %dx%d\n",
+			m.height, m.width,
+			m.height, m.initiative,
+		)
+	}
+
+	if len(r.loose) > 0 {
+		text += fmt.Sprintf("\nLoose dice %d\n", r.loose)
+	}
+
+	return text + "\n"
 }
 
 func main() {

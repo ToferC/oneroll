@@ -250,14 +250,19 @@ func (c *Character) Display() {
 		c.Mind, c.Command, c.Charm}
 
 	for _, stat := range stats {
-		text := fmt.Sprintf("%dd+%dhd+%dwd+%dgf+%dsp", stat.Dice.Normal, stat.Dice.Hard, stat.Dice.Wiggle,
-			stat.Dice.GoFirst, stat.Dice.Spray)
+		text := fmt.Sprintf("%dd+%dhd+%dwd+%dgf+%dsp",
+			stat.Dice.Normal,
+			stat.Dice.Hard,
+			stat.Dice.Wiggle,
+			stat.Dice.GoFirst,
+			stat.Dice.Spray,
+		)
 		fmt.Printf("%s: %s\n", stat.Name, text)
 	}
 	for _, loc := range c.HitLocations {
 		fmt.Println(loc)
 	}
 	for _, skill := range c.Skills {
-		fmt.Println(skill.Name, FormSkillDieString(skill))
+		fmt.Println(skill.Name, FormSkillDieString(skill, 1))
 	}
 }
