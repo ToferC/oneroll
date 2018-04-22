@@ -3,6 +3,7 @@ package oneroll
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -26,6 +27,13 @@ func RollDie(max, min, numDice int) int {
 		result += roll
 	}
 	return result
+}
+
+// TrimSliceBrackets trims the brackets from a slice and return ints as a string
+func TrimSliceBrackets(s []int) string {
+	rs := fmt.Sprintf("%d", s)
+	rs = strings.Trim(rs, "[]")
+	return rs
 }
 
 // VerifyLessThan10 checks and reduces die pools to less than 10d

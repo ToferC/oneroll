@@ -8,7 +8,8 @@ import (
 	"github.com/andlabs/ui"
 )
 
-func parseNumRolls(s string) (int, error) {
+// ParseNumRolls checks how many die rolls are required
+func ParseNumRolls(s string) (int, error) {
 
 	re := regexp.MustCompile("[0-9]+")
 
@@ -92,7 +93,7 @@ func GUI() {
 				Name: "Player",
 			}
 
-			numRolls, err := parseNumRolls(numInput.Text())
+			numRolls, err := ParseNumRolls(numInput.Text())
 
 			if err != nil {
 				resultString += "Invalid number of rolls. Set to 1.\n\n"
