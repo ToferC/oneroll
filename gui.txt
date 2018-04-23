@@ -2,27 +2,9 @@ package oneroll
 
 import (
 	"fmt"
-	"regexp"
-	"strconv"
 
 	"github.com/andlabs/ui"
 )
-
-// ParseNumRolls checks how many die rolls are required
-func ParseNumRolls(s string) (int, error) {
-
-	re := regexp.MustCompile("[0-9]+")
-
-	var num int
-	var numString string
-
-	numString = re.FindString(s)
-	num, err := strconv.Atoi(numString)
-	if err != nil {
-		num = 1
-	}
-	return num, err
-}
 
 // GUI renders a GUI for the die rolling app
 func GUI() {
