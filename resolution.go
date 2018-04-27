@@ -26,7 +26,7 @@ func FormSkillDieString(skill *Skill, actions int) string {
 }
 
 // OpposedRoll determines the results of an opposed roll between two or more actors
-func OpposedRoll(rolls ...*Roll) {
+func OpposedRoll(rolls ...*Roll) []Match {
 
 	fmt.Println("Opposed Roll Resolution")
 
@@ -34,7 +34,6 @@ func OpposedRoll(rolls ...*Roll) {
 	wd := make(map[string]int)
 
 	for _, r := range rolls {
-		wd[r.Actor.Name] = r.wiggles
 
 		fmt.Printf("Actor: %s, Action: %s, GoFirst: %d, Spray: %d, Wiggle Dice: %dwd\n",
 			r.Actor.Name,
@@ -49,7 +48,10 @@ func OpposedRoll(rolls ...*Roll) {
 		}
 		sort.Sort(ByWidthHeight(results))
 	}
+	return results
+}
 
+func PrintOpposed(results []Match) {
 	fmt.Println("***Resolution***")
 
 	for i, m := range results {
