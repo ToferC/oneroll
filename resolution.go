@@ -5,7 +5,7 @@ import (
 	"sort"
 )
 
-// FormDieString takes a stat and skill and creates a die pool string
+// FormSkillDieString takes a stat and skill and creates a die pool string
 func FormSkillDieString(skill *Skill, actions int) string {
 
 	normal := skill.LinkStat.Dice.Normal + skill.Dice.Normal
@@ -31,7 +31,6 @@ func OpposedRoll(rolls ...*Roll) []Match {
 	fmt.Println("Opposed Roll Resolution")
 
 	var results []Match
-	wd := make(map[string]int)
 
 	for _, r := range rolls {
 
@@ -40,10 +39,10 @@ func OpposedRoll(rolls ...*Roll) []Match {
 			r.Action,
 			r.DiePool.GoFirst,
 			r.DiePool.Spray,
-			r.wiggles,
+			r.Wiggles,
 		)
 
-		for _, m := range r.matches {
+		for _, m := range r.Matches {
 			results = append(results, m)
 		}
 		sort.Sort(ByWidthHeight(results))
@@ -58,8 +57,8 @@ func PrintOpposed(results []Match) {
 		fmt.Printf("***ACTION %d: Actor: %s, Match: %dx%d, Initiative: %dx%d\n",
 			i+1,
 			m.Actor.Name,
-			m.height, m.width,
-			m.height, m.initiative,
+			m.Height, m.Width,
+			m.Height, m.Initiative,
 		)
 	}
 }

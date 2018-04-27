@@ -156,20 +156,20 @@ func NewCharacter(name string) *Character {
 		Dice: &DiePool{
 			Normal:  2,
 			Hard:    0,
-			GoFirst: 1,
+			GoFirst: 0,
 		},
 	}
 
 	c.Coordination = &Statistic{
 		Name: "Coordination",
 		Dice: &DiePool{
-			Normal: 3,
+			Normal: 0,
 		},
 	}
 	c.Sense = &Statistic{
 		Name: "Sense",
 		Dice: &DiePool{
-			Normal: 3,
+			Normal: 0,
 		},
 	}
 	c.Mind = &Statistic{
@@ -202,14 +202,67 @@ func NewCharacter(name string) *Character {
 			HAR:          0,
 			Disabled:     false,
 		},
+		"Body": &Location{
+			Name:         "Body",
+			HitLoc:       []int{7, 8, 9},
+			Boxes:        10,
+			CurrentStun:  0,
+			CurrentWound: 0,
+			LAR:          0,
+			HAR:          0,
+			Disabled:     false,
+		},
+		"Left Arm": &Location{
+			Name:         "Left Arm",
+			HitLoc:       []int{5, 6},
+			Boxes:        6,
+			CurrentStun:  0,
+			CurrentWound: 0,
+			LAR:          0,
+			HAR:          0,
+			Disabled:     false,
+		},
+		"Right Arm": &Location{
+			Name:         "Right Arm",
+			HitLoc:       []int{3, 4},
+			Boxes:        6,
+			CurrentStun:  0,
+			CurrentWound: 0,
+			LAR:          0,
+			HAR:          0,
+			Disabled:     false,
+		},
+		"Left Leg": &Location{
+			Name:         "Left Leg",
+			HitLoc:       []int{2},
+			Boxes:        6,
+			CurrentStun:  0,
+			CurrentWound: 0,
+			LAR:          0,
+			HAR:          0,
+			Disabled:     false,
+		},
+		"Right Leg": &Location{
+			Name:         "Right Leg",
+			HitLoc:       []int{1},
+			Boxes:        6,
+			CurrentStun:  0,
+			CurrentWound: 0,
+			LAR:          0,
+			HAR:          0,
+			Disabled:     false,
+		},
 	}
+
+	c.BaseWill = c.Command.Dice.Normal + c.Charm.Dice.Normal
+	c.Willpower = c.BaseWill
 
 	c.Skills = map[string]*Skill{
 		"Athletics": &Skill{
 			Name:     "Athletics",
 			LinkStat: c.Body,
 			Dice: &DiePool{
-				Normal: 3,
+				Normal: 0,
 				Hard:   0,
 				Wiggle: 0,
 			},
@@ -218,22 +271,22 @@ func NewCharacter(name string) *Character {
 			Name:     "SmallArms",
 			LinkStat: c.Coordination,
 			Dice: &DiePool{
-				Normal: 2,
-				Hard:   1,
+				Normal: 0,
+				Hard:   0,
 			},
 		},
 		"Perception": &Skill{
 			Name:     "Perception",
 			LinkStat: c.Sense,
 			Dice: &DiePool{
-				Normal: 2,
+				Normal: 0,
 			},
 		},
 		"Business": &Skill{
 			Name:     "Business",
 			LinkStat: c.Mind,
 			Dice: &DiePool{
-				Normal: 3,
+				Normal: 0,
 			},
 		},
 	}
