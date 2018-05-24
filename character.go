@@ -6,6 +6,7 @@ import (
 
 // Character represents a full character in the ORE game
 type Character struct {
+	Id           int64
 	Name         string
 	Body         *Statistic
 	Coordination *Statistic
