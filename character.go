@@ -392,8 +392,8 @@ func (c *Character) String() string {
 		text += fmt.Sprintf("%s\n", stat)
 	}
 
-	text += fmt.Sprintf("\nBase Will:%s\n ", c.BaseWill)
-	text += fmt.Sprintf("Willpower: %s\n", c.Willpower)
+	text += fmt.Sprintf("\nBase Will:%d\n ", c.BaseWill)
+	text += fmt.Sprintf("Willpower: %d\n", c.Willpower)
 
 	text += fmt.Sprintf("\nSkills:\n")
 
