@@ -137,42 +137,88 @@ type Flaw struct {
 
 // Location represents a body area that can take damage
 type Location struct {
-	Name         string
-	HitLoc       []int
-	Boxes        int
-	CurrentStun  int
-	CurrentWound int
-	LAR          int
-	HAR          int
-	Disabled     bool
+	Name     string
+	HitLoc   []int
+	Boxes    int
+	Stun     int
+	Kill     int
+	LAR      int
+	HAR      int
+	Disabled bool
+}
+
+// Strings
+func (l Location) String() string {
+	text := fmt.Sprintf("%s - %s: Boxes: %d",
+		TrimSliceBrackets(l.HitLoc),
+		l.Name,
+		l.Boxes,
+	)
+
+	if l.LAR > 0 {
+		text += fmt.Sprintf(" LAR %d", l.LAR)
+	}
+
+	if l.HAR > 0 {
+		text += fmt.Sprintf(" HAR %d", l.HAR)
+	}
+
+	if l.Kill > 0 {
+		text += fmt.Sprintf(" Kill %d", l.Kill)
+	}
+
+	if l.Stun > 0 {
+		text += fmt.Sprintf(" Stun %d", l.Stun)
+	}
+	return text
 }
 
 func (s Statistic) String() string {
-	text := fmt.Sprintf("%s: %dd+%dhd+%dwd+%dgf+%dsp",
+	text := fmt.Sprintf("%s: %dd+%dhd+%dwd",
 		s.Name,
 		s.Dice.Normal,
 		s.Dice.Hard,
 		s.Dice.Wiggle,
-		s.Dice.GoFirst,
-		s.Dice.Spray)
+	)
+
+	if s.Dice.GoFirst > 0 {
+		text += fmt.Sprintf(" Go First %d", s.Dice.GoFirst)
+	}
+
+	if s.Dice.Spray > 0 {
+		text += fmt.Sprintf(" Spray %d", s.Dice.Spray)
+	}
 
 	return text
 }
 
 func (s Skill) String() string {
-	text := fmt.Sprintf("%s (%s): %dd+%dhd+%dwd+%dgf+%dsp",
-		s.Name,
+	text := fmt.Sprintf("%s ",
+		s.Name)
+
+	if s.ReqSpec {
+		text += fmt.Sprintf("[%s] ", s.Specialization)
+	}
+
+	text += fmt.Sprintf("(%s): %dd+%dhd+%dwd",
 		s.LinkStat.Name,
 		s.Dice.Normal,
 		s.Dice.Hard,
 		s.Dice.Wiggle,
-		s.Dice.GoFirst,
-		s.Dice.Spray)
+	)
+
+	if s.Dice.GoFirst > 0 {
+		text += fmt.Sprintf(" Go First %d", s.Dice.GoFirst)
+	}
+
+	if s.Dice.Spray > 0 {
+		text += fmt.Sprintf(" Spray %d", s.Dice.Spray)
+	}
 
 	return text
 }
 
-// NewWTCharacter generates an ORE character
+// NewWTCharacter generates an ORE WT character
 func NewWTCharacter(name string) *Character {
 
 	c := Character{
@@ -221,64 +267,64 @@ func NewWTCharacter(name string) *Character {
 
 	c.HitLocations = map[string]*Location{
 		"Head": &Location{
-			Name:         "Head",
-			HitLoc:       []int{10},
-			Boxes:        4,
-			CurrentStun:  0,
-			CurrentWound: 0,
-			LAR:          0,
-			HAR:          0,
-			Disabled:     false,
+			Name:     "Head",
+			HitLoc:   []int{10},
+			Boxes:    4,
+			Stun:     0,
+			Kill:     0,
+			LAR:      0,
+			HAR:      0,
+			Disabled: false,
 		},
 		"Body": &Location{
-			Name:         "Body",
-			HitLoc:       []int{7, 8, 9},
-			Boxes:        10,
-			CurrentStun:  0,
-			CurrentWound: 0,
-			LAR:          0,
-			HAR:          0,
-			Disabled:     false,
+			Name:     "Body",
+			HitLoc:   []int{7, 8, 9},
+			Boxes:    10,
+			Stun:     0,
+			Kill:     0,
+			LAR:      0,
+			HAR:      0,
+			Disabled: false,
 		},
 		"Left Arm": &Location{
-			Name:         "Left Arm",
-			HitLoc:       []int{5, 6},
-			Boxes:        6,
-			CurrentStun:  0,
-			CurrentWound: 0,
-			LAR:          0,
-			HAR:          0,
-			Disabled:     false,
+			Name:     "Left Arm",
+			HitLoc:   []int{5, 6},
+			Boxes:    6,
+			Stun:     0,
+			Kill:     0,
+			LAR:      0,
+			HAR:      0,
+			Disabled: false,
 		},
 		"Right Arm": &Location{
-			Name:         "Right Arm",
-			HitLoc:       []int{3, 4},
-			Boxes:        6,
-			CurrentStun:  0,
-			CurrentWound: 0,
-			LAR:          0,
-			HAR:          0,
-			Disabled:     false,
+			Name:     "Right Arm",
+			HitLoc:   []int{3, 4},
+			Boxes:    6,
+			Stun:     0,
+			Kill:     0,
+			LAR:      0,
+			HAR:      0,
+			Disabled: false,
 		},
 		"Left Leg": &Location{
-			Name:         "Left Leg",
-			HitLoc:       []int{2},
-			Boxes:        6,
-			CurrentStun:  0,
-			CurrentWound: 0,
-			LAR:          0,
-			HAR:          0,
-			Disabled:     false,
+			Name:     "Left Leg",
+			HitLoc:   []int{2},
+			Boxes:    6,
+			Stun:     0,
+			Kill:     0,
+			LAR:      0,
+			HAR:      0,
+			Disabled: false,
 		},
 		"Right Leg": &Location{
-			Name:         "Right Leg",
-			HitLoc:       []int{1},
-			Boxes:        6,
-			CurrentStun:  0,
-			CurrentWound: 0,
-			LAR:          0,
-			HAR:          0,
-			Disabled:     false,
+			Name:     "Right Leg",
+			HitLoc:   []int{1},
+			Boxes:    6,
+			Stun:     0,
+			Kill:     0,
+			LAR:      0,
+			HAR:      0,
+			Disabled: false,
 		},
 	}
 
@@ -535,20 +581,23 @@ func (c *Character) Display() {
 		c.Mind, c.Command, c.Charm}
 
 	for _, stat := range stats {
-		text := fmt.Sprintf("%dd+%dhd+%dwd+%dgf+%dsp",
-			stat.Dice.Normal,
-			stat.Dice.Hard,
-			stat.Dice.Wiggle,
-			stat.Dice.GoFirst,
-			stat.Dice.Spray,
-		)
-		fmt.Printf("%s: %s\n", stat.Name, text)
+		fmt.Println(stat)
 	}
+
+	fmt.Println("\nBase Will: ", c.BaseWill)
+	fmt.Println("Willpower: ", c.Willpower)
+
+	fmt.Println("\nSkills:")
+
+	for _, skill := range c.Skills {
+		if SkillRated(skill) {
+			fmt.Println(skill)
+		}
+	}
+
+	fmt.Println("\nHit Locations:")
+
 	for _, loc := range c.HitLocations {
 		fmt.Println(loc)
-	}
-	for _, skill := range c.Skills {
-		fmt.Println(skill.Name, skill.Dice.Normal)
-		//fmt.Println(skill.Name, FormSkillDieString(skill, 1))
 	}
 }
