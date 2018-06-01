@@ -145,6 +145,31 @@ type Location struct {
 	Disabled     bool
 }
 
+func (s Statistic) String() string {
+	text := fmt.Sprintf("%s: %dd+%dhd+%dwd+%dgf+%dsp",
+		s.Name,
+		s.Dice.Normal,
+		s.Dice.Hard,
+		s.Dice.Wiggle,
+		s.Dice.GoFirst,
+		s.Dice.Spray)
+
+	return text
+}
+
+func (s Skill) String() string {
+	text := fmt.Sprintf("%s (%s): %dd+%dhd+%dwd+%dgf+%dsp",
+		s.Name,
+		s.LinkStat.Name,
+		s.Dice.Normal,
+		s.Dice.Hard,
+		s.Dice.Wiggle,
+		s.Dice.GoFirst,
+		s.Dice.Spray)
+
+	return text
+}
+
 // NewCharacter generates an ORE character
 func NewCharacter(name string) *Character {
 
