@@ -174,12 +174,18 @@ func (l Location) String() string {
 }
 
 func (s Statistic) String() string {
-	text := fmt.Sprintf("%s: %dd+%dhd+%dwd",
+	text := fmt.Sprintf("%s: %dd",
 		s.Name,
 		s.Dice.Normal,
-		s.Dice.Hard,
-		s.Dice.Wiggle,
 	)
+
+	if s.Dice.Hard > 0 {
+		text += fmt.Sprintf("+%dhd", s.Dice.Hard)
+	}
+
+	if s.Dice.Wiggle > 0 {
+		text += fmt.Sprintf("+%dwd", s.Dice.Wiggle)
+	}
 
 	if s.Dice.GoFirst > 0 {
 		text += fmt.Sprintf(" Go First %d", s.Dice.GoFirst)
@@ -193,6 +199,7 @@ func (s Statistic) String() string {
 }
 
 func (s Skill) String() string {
+
 	text := fmt.Sprintf("%s ",
 		s.Name)
 
@@ -200,12 +207,18 @@ func (s Skill) String() string {
 		text += fmt.Sprintf("[%s] ", s.Specialization)
 	}
 
-	text += fmt.Sprintf("(%s): %dd+%dhd+%dwd",
+	text += fmt.Sprintf("(%s): %dd",
 		s.LinkStat.Name,
 		s.Dice.Normal,
-		s.Dice.Hard,
-		s.Dice.Wiggle,
 	)
+
+	if s.Dice.Hard > 0 {
+		text += fmt.Sprintf("+%dhd", s.Dice.Hard)
+	}
+
+	if s.Dice.Wiggle > 0 {
+		text += fmt.Sprintf("+%dwd", s.Dice.Wiggle)
+	}
 
 	if s.Dice.GoFirst > 0 {
 		text += fmt.Sprintf(" Go First %d", s.Dice.GoFirst)
