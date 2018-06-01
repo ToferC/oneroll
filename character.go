@@ -26,211 +26,6 @@ type Character struct {
 	PointCost    int
 }
 
-// Statistic represents common attributes possessed by every character
-type Statistic struct {
-	Name    string
-	Dice    *DiePool
-	Booster []*Booster
-}
-
-// Skill represents specific training
-type Skill struct {
-	Name           string
-	LinkStat       *Statistic
-	Dice           *DiePool
-	ReqSpec        bool
-	Specialization string
-}
-
-// HyperStat is a modified version of a regular Statistic
-type HyperStat struct {
-	Name       string
-	Dice       *DiePool
-	Capacities []*Capacity
-	Extras     []*Extra
-	Flaws      []*Flaw
-	CostPerDie int
-	Booster    []*Booster
-}
-
-// HyperSkill is a modified version of a regular Skill
-type HyperSkill struct {
-	Name       string
-	LinkStat   *Statistic
-	Dice       *DiePool
-	Capacities []*Capacity
-	Extras     []*Extra
-	Flaws      []*Flaw
-	CostPerDie int
-}
-
-// Archtype is a grouping of Sources, Permissions & Intrinsics that defines what powers a character can use
-type Archtype struct {
-	Sources     []*Source
-	Permissions []*Permission
-	Intrinsics  []*Intrinsic
-}
-
-// Source is a source of a Character's powers
-type Source struct {
-	Type        string
-	Cost        int
-	Description string
-}
-
-// Permission is the type of powers a Character can purchase
-type Permission struct {
-	Type        string
-	Cost        int
-	Description string
-}
-
-// Intrinsic is a modification from the human standard
-type Intrinsic struct {
-	Name        string
-	Cost        int
-	Description string
-}
-
-// Power is a non-standard ability or miracle
-type Power struct {
-	Name      string
-	Qualities []*Quality
-	Dice      *DiePool
-	Effect    string
-	Dud       bool
-}
-
-// Quality is either Attack, Defend or Useful
-type Quality struct {
-	Type       string
-	Level      int
-	Capacities []*Capacity
-	Extras     []*Extra
-	Flaws      []*Flaw
-	CostPerDie int
-}
-
-// Capacity is Range, Mass, Touch or Speed
-type Capacity struct {
-	Type    string
-	Level   int
-	Booster *Booster
-}
-
-// Booster multiplies a Capacity or Statistic
-type Booster struct {
-	Level int
-}
-
-// Extra enhances the abilities of a Power Quality
-type Extra struct {
-	Name     string
-	Modifier int
-}
-
-// Flaw limits the abilities of a Power Quality
-type Flaw struct {
-	Name     string
-	Modifier int
-}
-
-// Location represents a body area that can take damage
-type Location struct {
-	Name     string
-	HitLoc   []int
-	Boxes    int
-	Stun     int
-	Kill     int
-	LAR      int
-	HAR      int
-	Disabled bool
-}
-
-// Strings
-func (l Location) String() string {
-	text := fmt.Sprintf("%s - %s: Boxes: %d",
-		TrimSliceBrackets(l.HitLoc),
-		l.Name,
-		l.Boxes,
-	)
-
-	if l.LAR > 0 {
-		text += fmt.Sprintf(" LAR %d", l.LAR)
-	}
-
-	if l.HAR > 0 {
-		text += fmt.Sprintf(" HAR %d", l.HAR)
-	}
-
-	if l.Kill > 0 {
-		text += fmt.Sprintf(" Kill %d", l.Kill)
-	}
-
-	if l.Stun > 0 {
-		text += fmt.Sprintf(" Stun %d", l.Stun)
-	}
-	return text
-}
-
-func (s Statistic) String() string {
-	text := fmt.Sprintf("%s: %dd",
-		s.Name,
-		s.Dice.Normal,
-	)
-
-	if s.Dice.Hard > 0 {
-		text += fmt.Sprintf("+%dhd", s.Dice.Hard)
-	}
-
-	if s.Dice.Wiggle > 0 {
-		text += fmt.Sprintf("+%dwd", s.Dice.Wiggle)
-	}
-
-	if s.Dice.GoFirst > 0 {
-		text += fmt.Sprintf(" Go First %d", s.Dice.GoFirst)
-	}
-
-	if s.Dice.Spray > 0 {
-		text += fmt.Sprintf(" Spray %d", s.Dice.Spray)
-	}
-
-	return text
-}
-
-func (s Skill) String() string {
-
-	text := fmt.Sprintf("%s ",
-		s.Name)
-
-	if s.ReqSpec {
-		text += fmt.Sprintf("[%s] ", s.Specialization)
-	}
-
-	text += fmt.Sprintf("(%s): %dd",
-		s.LinkStat.Name,
-		s.Dice.Normal,
-	)
-
-	if s.Dice.Hard > 0 {
-		text += fmt.Sprintf("+%dhd", s.Dice.Hard)
-	}
-
-	if s.Dice.Wiggle > 0 {
-		text += fmt.Sprintf("+%dwd", s.Dice.Wiggle)
-	}
-
-	if s.Dice.GoFirst > 0 {
-		text += fmt.Sprintf(" Go First %d", s.Dice.GoFirst)
-	}
-
-	if s.Dice.Spray > 0 {
-		text += fmt.Sprintf(" Spray %d", s.Dice.Spray)
-	}
-
-	return text
-}
-
 // NewWTCharacter generates an ORE WT character
 func NewWTCharacter(name string) *Character {
 
@@ -586,31 +381,32 @@ func NewWTCharacter(name string) *Character {
 }
 
 // Display character
-func (c *Character) Display() {
-
-	fmt.Println(c.Name)
+func (c *Character) String() string {
 
 	stats := []*Statistic{c.Body, c.Coordination, c.Sense,
 		c.Mind, c.Command, c.Charm}
 
+	text := fmt.Sprintf("%s\n\nStats:\n", c.Name)
+
 	for _, stat := range stats {
-		fmt.Println(stat)
+		text += fmt.Sprintf("%s\n", stat)
 	}
 
-	fmt.Println("\nBase Will: ", c.BaseWill)
-	fmt.Println("Willpower: ", c.Willpower)
+	text += fmt.Sprintf("\nBase Will:%s\n ", c.BaseWill)
+	text += fmt.Sprintf("Willpower: %s\n", c.Willpower)
 
-	fmt.Println("\nSkills:")
+	text += fmt.Sprintf("\nSkills:\n")
 
 	for _, skill := range c.Skills {
 		if SkillRated(skill) {
-			fmt.Println(skill)
+			text += fmt.Sprintf("%s\n", skill)
 		}
 	}
 
-	fmt.Println("\nHit Locations:")
+	text += fmt.Sprintf("\nHit Locations:\n")
 
 	for _, loc := range c.HitLocations {
-		fmt.Println(loc)
+		text += fmt.Sprintf("%s\n", loc)
 	}
+	return text
 }
