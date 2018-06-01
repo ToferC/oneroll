@@ -35,9 +35,11 @@ type Statistic struct {
 
 // Skill represents specific training
 type Skill struct {
-	Name     string
-	LinkStat *Statistic
-	Dice     *DiePool
+	Name           string
+	LinkStat       *Statistic
+	Dice           *DiePool
+	ReqSpec        bool
+	Specialization string
 }
 
 // HyperStat is a modified version of a regular Statistic
@@ -170,8 +172,8 @@ func (s Skill) String() string {
 	return text
 }
 
-// NewCharacter generates an ORE character
-func NewCharacter(name string) *Character {
+// NewWTCharacter generates an ORE character
+func NewWTCharacter(name string) *Character {
 
 	c := Character{
 		Name: name,
@@ -284,6 +286,7 @@ func NewCharacter(name string) *Character {
 	c.Willpower = c.BaseWill
 
 	c.Skills = map[string]*Skill{
+		// Body Skills
 		"Athletics": &Skill{
 			Name:     "Athletics",
 			LinkStat: c.Body,
@@ -293,12 +296,87 @@ func NewCharacter(name string) *Character {
 				Wiggle: 0,
 			},
 		},
-		"SmallArms": &Skill{
-			Name:     "SmallArms",
+		"Block": &Skill{
+			Name:     "Block",
+			LinkStat: c.Body,
+			Dice: &DiePool{
+				Normal: 0,
+				Hard:   0,
+				Wiggle: 0,
+			},
+		},
+		"Brawling": &Skill{
+			Name:     "Brawling",
+			LinkStat: c.Body,
+			Dice: &DiePool{
+				Normal: 0,
+				Hard:   0,
+				Wiggle: 0,
+			},
+		},
+		"Endurance": &Skill{
+			Name:     "Endurance",
+			LinkStat: c.Body,
+			Dice: &DiePool{
+				Normal: 0,
+				Hard:   0,
+				Wiggle: 0,
+			},
+		},
+		"Melee Weapon": &Skill{
+			Name:     "Melee Weapon",
+			LinkStat: c.Body,
+			Dice: &DiePool{
+				Normal: 0,
+				Hard:   0,
+				Wiggle: 0,
+			},
+			ReqSpec:        true,
+			Specialization: "Sword",
+		},
+		// Coordination Skills
+		"Dodge": &Skill{
+			Name:     "Dodge",
 			LinkStat: c.Coordination,
 			Dice: &DiePool{
 				Normal: 0,
 				Hard:   0,
+			},
+		},
+		"Driving": &Skill{
+			Name:     "Driving",
+			LinkStat: c.Coordination,
+			Dice: &DiePool{
+				Normal: 0,
+				Hard:   0,
+			},
+			ReqSpec:        true,
+			Specialization: "Ground",
+		},
+		"Ranged Weapon": &Skill{
+			Name:     "Ranged Weapon",
+			LinkStat: c.Coordination,
+			Dice: &DiePool{
+				Normal: 0,
+				Hard:   0,
+			},
+			ReqSpec:        true,
+			Specialization: "Pistol",
+		},
+		"Stealth": &Skill{
+			Name:     "Stealth",
+			LinkStat: c.Coordination,
+			Dice: &DiePool{
+				Normal: 0,
+				Hard:   0,
+			},
+		},
+		// Sense Skills
+		"Empathy": &Skill{
+			Name:     "Empathy",
+			LinkStat: c.Sense,
+			Dice: &DiePool{
+				Normal: 0,
 			},
 		},
 		"Perception": &Skill{
@@ -308,9 +386,137 @@ func NewCharacter(name string) *Character {
 				Normal: 0,
 			},
 		},
-		"Business": &Skill{
-			Name:     "Business",
+		"Scrutiny": &Skill{
+			Name:     "Scrutiny",
+			LinkStat: c.Sense,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		// Mind Skills
+		"First Aid": &Skill{
+			Name:     "First Aid",
 			LinkStat: c.Mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Knowledge": &Skill{
+			Name:     "Knowledge",
+			LinkStat: c.Mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+			ReqSpec:        true,
+			Specialization: "Alchemy",
+		},
+		"Languages": &Skill{
+			Name:     "Languages",
+			LinkStat: c.Mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+			ReqSpec:        true,
+			Specialization: "Chinese",
+		},
+		"Medicine": &Skill{
+			Name:     "Medicine",
+			LinkStat: c.Mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Navigation": &Skill{
+			Name:     "Navigation",
+			LinkStat: c.Mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Research": &Skill{
+			Name:     "Research",
+			LinkStat: c.Mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Security Systems": &Skill{
+			Name:     "Security Systems",
+			LinkStat: c.Mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Streetwise": &Skill{
+			Name:     "Streetwise",
+			LinkStat: c.Mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Survival": &Skill{
+			Name:     "Survival",
+			LinkStat: c.Mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Tactics": &Skill{
+			Name:     "Tactics",
+			LinkStat: c.Mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		// Charm Skills
+		"Lie": &Skill{
+			Name:     "Lie",
+			LinkStat: c.Charm,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Performance": &Skill{
+			Name:     "Performance",
+			LinkStat: c.Charm,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+			ReqSpec:        true,
+			Specialization: "Standup",
+		},
+		"Persuasion": &Skill{
+			Name:     "Persuasion",
+			LinkStat: c.Charm,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		// Command Skills
+		"Interrogation": &Skill{
+			Name:     "Interrogation",
+			LinkStat: c.Command,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Intimidation": &Skill{
+			Name:     "Intimidation",
+			LinkStat: c.Command,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Leadership": &Skill{
+			Name:     "Leadership",
+			LinkStat: c.Command,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Stability": &Skill{
+			Name:     "Stability",
+			LinkStat: c.Command,
 			Dice: &DiePool{
 				Normal: 0,
 			},
