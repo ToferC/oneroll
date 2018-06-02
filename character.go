@@ -390,18 +390,19 @@ func (c *Character) String() string {
 
 	for _, stat := range stats {
 		text += fmt.Sprintf("%s\n", stat)
+		for _, skill := range c.Skills {
+			if skill.LinkStat == stat {
+				if SkillRated(skill) {
+					text += fmt.Sprintf("-- %s\n", skill)
+				}
+			}
+		}
 	}
 
-	text += fmt.Sprintf("\nBase Will:%d\n ", c.BaseWill)
+	text += fmt.Sprintf("\nBase Will:%d\n", c.BaseWill)
 	text += fmt.Sprintf("Willpower: %d\n", c.Willpower)
 
 	text += fmt.Sprintf("\nSkills:\n")
-
-	for _, skill := range c.Skills {
-		if SkillRated(skill) {
-			text += fmt.Sprintf("%s\n", skill)
-		}
-	}
 
 	text += fmt.Sprintf("\nHit Locations:\n")
 
