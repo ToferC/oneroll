@@ -383,21 +383,9 @@ func NewWTCharacter(name string) *Character {
 // Display character
 func (c *Character) String() string {
 
-	stats := []*Statistic{c.Body, c.Coordination, c.Sense,
-		c.Mind, c.Command, c.Charm}
+	text := fmt.Sprintf("\n%s\n\nStats:\n", c.Name)
 
-	text := fmt.Sprintf("%s\n\nStats:\n", c.Name)
-
-	for _, stat := range stats {
-		text += fmt.Sprintf("%s\n", stat)
-		for _, skill := range c.Skills {
-			if skill.LinkStat.Name == stat.Name {
-				if SkillRated(skill) {
-					text += fmt.Sprintf("-- %s\n", skill)
-				}
-			}
-		}
-	}
+	text += ShowSkills(c)
 
 	text += fmt.Sprintf("\nBase Will:%d\n", c.BaseWill)
 	text += fmt.Sprintf("Willpower: %d\n", c.Willpower)

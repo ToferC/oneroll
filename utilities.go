@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/toferc/oneroll"
 )
 
 // Max returns the larger of two ints
@@ -60,4 +62,22 @@ func SkillRated(s *Skill) bool {
 		return true
 	}
 	return false
+}
+
+func ShowSkills(c *Character) string {
+	statistics := []*oneroll.Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
+
+	var text string
+
+	for _, stat := range statistics {
+		text += fmt.Sprintf("%s\n", stat)
+		for _, skill := range c.Skills {
+			if skill.LinkStat.Name == stat.Name {
+				if oneroll.SkillRated(skill) {
+					text += fmt.Sprintf("-- %s\n", skill)
+				}
+			}
+		}
+	}
+	return text
 }
