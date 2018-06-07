@@ -11,12 +11,13 @@ type Power struct {
 
 // Quality is either Attack, Defend or Useful
 type Quality struct {
-	Type       string
-	Level      int
-	Capacities []*Capacity
-	Extras     []*Extra
-	Flaws      []*Flaw
-	CostPerDie int
+	Type        string
+	Description string
+	Level       int
+	Capacities  []*Capacity
+	Extras      []*Extra
+	Flaws       []*Flaw
+	CostPerDie  int
 }
 
 // Capacity is Range, Mass, Touch or Speed
@@ -41,4 +42,32 @@ type Extra struct {
 type Flaw struct {
 	Name     string
 	Modifier int
+}
+
+// NewPower generates a new empty Power
+func (p *Power) NewPower(t string) *Power {
+	p.Name = t
+	p.Effect = ""
+	p.Qualities = []*Quality{}
+	p.Dice = &DiePool{}
+	p.Dud = false
+
+	// Take user input
+
+	return p
+}
+
+// NewQuality generates a new empty Quality
+func (q *Quality) NewQuality(t string) *Quality {
+	q.Type = t
+	q.Description = ""
+	q.CostPerDie = 2
+	q.Level = 0
+	q.Capacities = []*Capacity{}
+	q.Extras = []*Extra{}
+	q.Flaws = []*Flaw{}
+
+	// Take user input
+
+	return q
 }
