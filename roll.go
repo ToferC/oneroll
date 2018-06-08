@@ -32,6 +32,32 @@ type DiePool struct {
 	GoFirst int
 }
 
+func (d DiePool) String() string {
+	var text string
+
+	if d.Normal > 0 {
+		text += fmt.Sprintf("%dd", d.Normal)
+	}
+
+	if d.Hard > 0 {
+		text += fmt.Sprintf("+%dhd", d.Hard)
+	}
+
+	if d.Wiggle > 0 {
+		text += fmt.Sprintf("+%dwd", d.Wiggle)
+	}
+
+	if d.GoFirst > 0 {
+		text += fmt.Sprintf(" Go First %d", d.GoFirst)
+	}
+
+	if d.Spray > 0 {
+		text += fmt.Sprintf(" Spray %d", d.Spray)
+	}
+
+	return text
+}
+
 // Match shows the height and width of a specific match
 type Match struct {
 	Actor      *Character

@@ -17,7 +17,7 @@ type Character struct {
 	BaseWill     int
 	Willpower    int
 	Skills       map[string]*Skill
-	Archtypes    map[string]*Archtype
+	Archtype     *Archtype
 	HyperStats   map[string]*HyperStat
 	HyperSkills  map[string]*HyperSkill
 	Permissions  map[string]*Permission
