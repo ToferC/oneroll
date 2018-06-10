@@ -91,9 +91,13 @@ func (p Permission) String() string {
 
 // Intrinsic is a modification from the human standard
 type Intrinsic struct {
-	Name        string
-	Cost        int
-	Description string
+	Name          string
+	Description   string
+	RequiresLevel bool
+	Level         int
+	RequiresInfo  bool
+	Info          string
+	Cost          int
 }
 
 func (i Intrinsic) String() string {
@@ -189,5 +193,83 @@ var Permissions = map[string]*Permission{
 		Cost:         2,
 		Description:  "",
 		AllowGadgets: true,
+	},
+}
+
+// Intrinsics sets Wild Talents default permissions
+var Intrinsics = map[string]*Intrinsic{
+
+	"Allergy": &Intrinsic{
+		Name:          "Allergy",
+		RequiresInfo:  true,
+		Info:          "Substance frequency x threat",
+		RequiresLevel: true,
+		Level:         3,
+		Description:   "Default to Frequent & Kills",
+		Cost:          -6,
+	},
+	"Brute/Frail": &Intrinsic{
+		Name:        "Brute/Frail",
+		Description: "",
+		Cost:        -8,
+	},
+	"Custom Stats": &Intrinsic{
+		Name:         "Custom Stats",
+		Description:  "",
+		RequiresInfo: true,
+		Info:         "",
+		Cost:         5,
+	},
+	"Globular": &Intrinsic{
+		Name:        "Globular",
+		Description: "",
+		Cost:        8,
+	},
+	"Inhuman": &Intrinsic{
+		Name:        "Inhuman",
+		Description: "",
+		Cost:        -8,
+	},
+	"Mandatory Power": &Intrinsic{
+		Name:         "Mandatory Power",
+		RequiresInfo: true,
+		Info:         "",
+		Description:  "",
+		Cost:         0,
+	},
+	"Mutable": &Intrinsic{
+		Name:        "Mutable",
+		Description: "",
+		Cost:        15,
+	},
+	"No Base Will": &Intrinsic{
+		Name:        "No Base Will",
+		Description: "",
+		Cost:        -10,
+	},
+	"No Willpower": &Intrinsic{
+		Name:        "No Willpower",
+		Description: "",
+		Cost:        -5,
+	},
+	"No Willpower No Way": &Intrinsic{
+		Name:        "No Willpower No Way",
+		Description: "",
+		Cost:        -5,
+	},
+	"Unhealing": &Intrinsic{
+		Name:        "Unhealing",
+		Description: "",
+		Cost:        8,
+	},
+	"Vulnerable": &Intrinsic{
+		Name:        "Vulnerable",
+		Description: "",
+		Cost:        8,
+	},
+	"Willpower Contest": &Intrinsic{
+		Name:        "Willpower Contest",
+		Description: "",
+		Cost:        -10,
 	},
 }
