@@ -48,9 +48,8 @@ func (c *Character) String() string {
 		text += fmt.Sprintf("%s\n", loc)
 	}
 
-	text += fmt.Sprintf("\nPowers:\n")
-
 	if len(c.Archtype.Sources) > 0 && len(c.Powers) > 0 {
+		text += fmt.Sprintf("\nPowers:\n")
 		for _, p := range c.Powers {
 			text += fmt.Sprintf("%s\n\n", p)
 		}

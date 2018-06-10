@@ -79,26 +79,3 @@ func (q *Quality) CalculateQualityCost() {
 
 	q.CostPerDie = b
 }
-
-// Capacity is Range, Mass, Touch or Speed
-type Capacity struct {
-	Type    string
-	Level   int
-	Value   string
-	Booster *Booster
-}
-
-func (c Capacity) String() string {
-	text := fmt.Sprintf("%s (%s)",
-		c.Type,
-		c.Value)
-
-	// Modify value by level & booster
-
-	return text
-}
-
-// Booster multiplies a Capacity or Statistic
-type Booster struct {
-	Level int
-}
