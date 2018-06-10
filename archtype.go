@@ -32,6 +32,14 @@ func (a Archtype) String() string {
 
 	text = text[:len(text)-2]
 
+	text += "\nIntrinsics: "
+
+	for _, i := range a.Intrinsics {
+		text += fmt.Sprintf("%s (%dpts), ", i.Name, i.Cost)
+	}
+
+	text = text[:len(text)-2]
+
 	return text
 }
 
