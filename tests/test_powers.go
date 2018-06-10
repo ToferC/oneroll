@@ -18,6 +18,19 @@ func main() {
 
 	c.Archtype.CalculateArchtypeCost()
 
+	c.Body.Dice.Hard = 3
+	c.Body.Dice.GoFirst = 1
+
+	c.Skills["Athletics"] = &oneroll.Skill{
+		Name:     "Athletics",
+		LinkStat: c.Body,
+		Dice: &oneroll.DiePool{
+			Normal: 3,
+			Hard:   0,
+			Wiggle: 0,
+		},
+	}
+
 	f := oneroll.NewPower("Telekinisis")
 
 	f.Dice = &oneroll.DiePool{
@@ -75,6 +88,8 @@ func main() {
 
 	c.Powers = map[string]*oneroll.Power{
 		"Telekinisis": f}
+
+	c.CalculateCharacterCost()
 
 	fmt.Println(c)
 

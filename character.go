@@ -29,7 +29,7 @@ type Character struct {
 // Display character
 func (c *Character) String() string {
 
-	text := fmt.Sprintf("\n%s\n\n", c.Name)
+	text := fmt.Sprintf("\n%s (%d pts)\n\n", c.Name, c.PointCost)
 
 	if c.Archtype.Type != "" {
 		text += fmt.Sprint(c.Archtype)
@@ -57,4 +57,43 @@ func (c *Character) String() string {
 	}
 
 	return text
+}
+
+// CalculateCharacterCost sums total costs of all character elements
+func (c *Character) CalculateCharacterCost() {
+
+	var cost int
+
+	c.Archtype.CalculateArchtypeCost()
+
+	cost += c.Archtype.Cost
+
+	statistics := []*Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
+
+	for _, stat := range statistics {
+		stat.CalculateStatCost()
+		cost += stat.Cost
+	}
+
+	// Hyperstats
+
+	for _, skill := range c.Skills {
+		skill.CalculateSkillCost()
+		cost += skill.Cost
+	}
+
+	// HyperSkills
+
+	for _, power := range c.Powers {
+		power.CalculatePowerCost()
+		cost += power.Cost
+	}
+
+	comTotal := c.Command.Dice.Normal + c.Command.Dice.Hard + c.Command.Dice.Wiggle
+	charmTotal := c.Charm.Dice.Normal + c.Charm.Dice.Hard + c.Charm.Dice.Wiggle
+
+	cost += 3*c.BaseWill - (comTotal + charmTotal)
+	cost += c.Willpower - c.BaseWill
+
+	c.PointCost = cost
 }

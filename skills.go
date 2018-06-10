@@ -9,6 +9,7 @@ type Skill struct {
 	Dice           *DiePool
 	ReqSpec        bool
 	Specialization string
+	Cost           int
 }
 
 // HyperSkill is a modified version of a regular Skill
@@ -19,6 +20,7 @@ type HyperSkill struct {
 	Capacities []*Capacity
 	Modifier   []*Modifier
 	CostPerDie int
+	Cost       int
 }
 
 func (s Skill) String() string {
@@ -77,4 +79,19 @@ func ShowSkills(c *Character, allSkills bool) string {
 		}
 	}
 	return text
+}
+
+// CalculateSkillCost determines the cost of a Skill
+// Called from Character.CalculateCharacterCost()
+func (s *Skill) CalculateSkillCost() {
+	b := 2
+
+	b += s.Dice.GoFirst
+	b += s.Dice.Spray
+
+	total := b * s.Dice.Normal
+	total += b * 2 * s.Dice.Hard
+	total += b * 4 * s.Dice.Wiggle
+
+	s.Cost = total
 }
