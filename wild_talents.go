@@ -7,6 +7,8 @@ func NewWTCharacter(name string) *Character {
 		Name: name,
 	}
 
+	c.Archtype = new(Archtype)
+
 	c.Body = &Statistic{
 		Name: "Body",
 		Dice: &DiePool{
@@ -350,6 +352,8 @@ func NewWTCharacter(name string) *Character {
 			},
 		},
 	}
+
+	c.Powers = map[string]*Power{}
 
 	return &c
 }
