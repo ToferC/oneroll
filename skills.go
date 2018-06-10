@@ -17,8 +17,7 @@ type HyperSkill struct {
 	LinkStat   *Statistic
 	Dice       *DiePool
 	Capacities []*Capacity
-	Extras     []*Extra
-	Flaws      []*Flaw
+	Modifier   []*Modifier
 	CostPerDie int
 }
 

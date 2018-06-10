@@ -10,10 +10,13 @@ func main() {
 	c := oneroll.NewWTCharacter("Deacon")
 
 	c.Archtype = &oneroll.Archtype{
-		Type:        "Cadaver",
-		Sources:     []*oneroll.Source{oneroll.Sources["Genetic"]},
+		Type: "Cadaver",
+		Sources: []*oneroll.Source{oneroll.Sources["Genetic"],
+			oneroll.Sources["Technological"]},
 		Permissions: []*oneroll.Permission{oneroll.Permissions["Super"]},
 	}
+
+	c.Archtype.CalculateArchtypeCost()
 
 	f := oneroll.NewPower("Telekinisis")
 
@@ -22,20 +25,20 @@ func main() {
 		Hard:   2,
 	}
 
-	e := oneroll.Modifiers["Area"]
+	area := oneroll.Modifiers["Area"]
+	ifthen := oneroll.Modifiers["If/Then"]
+	ifthen.Info = "Only when angry"
 
-	e.Level = 3
-	e.Cost = e.ModifierCost()
+	area.Level = 3
 
-	e2 := oneroll.Modifiers["Go First"]
-	e2.Cost = e2.ModifierCost()
+	gf := oneroll.Modifiers["Go First"]
 
 	a := oneroll.Quality{
 		Type:        "Attack",
 		Description: "TK Blast",
 		Level:       3,
 		CostPerDie:  2,
-		Modifiers:   []*oneroll.Modifier{e},
+		Modifiers:   []*oneroll.Modifier{area, ifthen},
 	}
 
 	rng := oneroll.Capacity{
@@ -53,7 +56,7 @@ func main() {
 		Description: "Fly",
 		Level:       1,
 		CostPerDie:  2,
-		Modifiers:   []*oneroll.Modifier{e2},
+		Modifiers:   []*oneroll.Modifier{gf},
 	}
 
 	u.Capacities = []*oneroll.Capacity{
@@ -64,12 +67,9 @@ func main() {
 		&rng,
 	}
 
-	a.CostPerDie = a.QualityCost()
-	u.CostPerDie = u.QualityCost()
-
 	f.Qualities = []*oneroll.Quality{&a, &u}
 
-	f.Cost = f.PowerCost()
+	f.CalculatePowerCost()
 
 	f.Effect = "Fly and throw TK blasts."
 
@@ -77,5 +77,5 @@ func main() {
 		"Telekinisis": f}
 
 	fmt.Println(c)
-	fmt.Println(c.Powers["Telekinisis"])
+
 }

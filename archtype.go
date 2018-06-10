@@ -1,11 +1,61 @@
 package oneroll
 
+import (
+	"fmt"
+)
+
 // Archtype is a grouping of Sources, Permissions & Intrinsics that defines what powers a character can use
 type Archtype struct {
 	Type        string
 	Sources     []*Source
 	Permissions []*Permission
 	Intrinsics  []*Intrinsic
+	Cost        int
+}
+
+func (a Archtype) String() string {
+	text := fmt.Sprintf("Archtype: %s (%dpts)", a.Type, a.Cost)
+
+	text += "\nSources: "
+
+	for _, s := range a.Sources {
+		text += fmt.Sprintf("%s (%dpts), ", s.Type, s.Cost)
+	}
+
+	text = text[:len(text)-2]
+
+	text += "\nPermissions: "
+
+	for _, p := range a.Permissions {
+		text += fmt.Sprintf("%s (%dpts), ", p.Type, p.Cost)
+	}
+
+	text = text[:len(text)-2]
+
+	return text
+}
+
+// CalculateArchtypeCost adds costs from sources, permissions and intrinsics
+func (a *Archtype) CalculateArchtypeCost() {
+	var c int
+
+	for _, s := range a.Sources {
+		//First Source is free and all sources but focus cost 5pts
+		if s.Type == a.Sources[0].Type && s.Cost > 0 {
+			s.Cost = 0
+		}
+		c += s.Cost
+	}
+
+	for _, p := range a.Permissions {
+		c += p.Cost
+	}
+
+	for _, i := range a.Intrinsics {
+		c += i.Cost
+	}
+
+	a.Cost = c
 }
 
 // Source is a source of a Character's powers
@@ -13,6 +63,10 @@ type Source struct {
 	Type        string
 	Cost        int // First source is free
 	Description string
+}
+
+func (s Source) String() string {
+	return fmt.Sprintf("%s (%dpts)", s.Type, s.Cost)
 }
 
 // Permission is the type of powers a Character can purchase
@@ -31,6 +85,10 @@ type Permission struct {
 	PowerLimit        int
 }
 
+func (p Permission) String() string {
+	return fmt.Sprintf("%s (%dpts)", p.Type, p.Cost)
+}
+
 // Intrinsic is a modification from the human standard
 type Intrinsic struct {
 	Name        string
@@ -38,10 +96,13 @@ type Intrinsic struct {
 	Description string
 }
 
+func (i Intrinsic) String() string {
+	return fmt.Sprintf("%s (%dpts)", i.Name, i.Cost)
+}
+
 // Sources Set Wild Talents Sources
 var Sources = map[string]*Source{
 
-	"None":      &Source{Type: "None", Cost: 0, Description: "No Sources"},
 	"Construct": &Source{Type: "Construct", Cost: 5, Description: ""},
 	"Cyborg":    &Source{Type: "Cyborg", Cost: 5, Description: ""},
 	"Divine":    &Source{Type: "Divine", Cost: 5, Description: ""},

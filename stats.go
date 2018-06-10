@@ -14,8 +14,7 @@ type HyperStat struct {
 	Name       string
 	Dice       *DiePool
 	Capacities []*Capacity
-	Extras     []*Extra
-	Flaws      []*Flaw
+	Modifiers  []*Modifier
 	CostPerDie int
 	Booster    []*Booster
 }

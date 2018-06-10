@@ -29,7 +29,13 @@ type Character struct {
 // Display character
 func (c *Character) String() string {
 
-	text := fmt.Sprintf("\n%s\n\nStats:\n", c.Name)
+	text := fmt.Sprintf("\n%s\n\n", c.Name)
+
+	if c.Archtype.Type != "" {
+		text += fmt.Sprint(c.Archtype)
+	}
+
+	text += "\n\nStats:\n"
 
 	text += ShowSkills(c, false)
 
@@ -41,5 +47,14 @@ func (c *Character) String() string {
 	for _, loc := range c.HitLocations {
 		text += fmt.Sprintf("%s\n", loc)
 	}
+
+	text += fmt.Sprintf("\nPowers:\n")
+
+	if len(c.Archtype.Sources) > 0 && len(c.Powers) > 0 {
+		for _, p := range c.Powers {
+			text += fmt.Sprintf("%s\n\n", p)
+		}
+	}
+
 	return text
 }
