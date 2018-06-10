@@ -46,6 +46,10 @@ func main() {
 
 	gf := oneroll.Modifiers["Go First"]
 
+	boost := oneroll.Modifiers["Booster"]
+
+	boost.Level = 4
+
 	a := oneroll.Quality{
 		Type:        "Attack",
 		Description: "TK Blast",
@@ -59,6 +63,10 @@ func main() {
 		Value: "500m",
 	}
 
+	mass := oneroll.Capacity{
+		Type: "Mass",
+	}
+
 	speed := oneroll.Capacity{
 		Type:  "Speed",
 		Value: "250kph",
@@ -69,7 +77,7 @@ func main() {
 		Description: "Fly",
 		Level:       1,
 		CostPerDie:  2,
-		Modifiers:   []*oneroll.Modifier{gf},
+		Modifiers:   []*oneroll.Modifier{gf, boost},
 	}
 
 	u.Capacities = []*oneroll.Capacity{
@@ -78,6 +86,7 @@ func main() {
 
 	a.Capacities = []*oneroll.Capacity{
 		&rng,
+		&mass,
 	}
 
 	f.Qualities = []*oneroll.Quality{&a, &u}
@@ -89,6 +98,7 @@ func main() {
 	c.Powers = map[string]*oneroll.Power{
 		"Telekinisis": f}
 
+	f.DeterminePowerCapacities()
 	c.CalculateCharacterCost()
 
 	fmt.Println(c)

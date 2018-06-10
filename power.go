@@ -56,6 +56,80 @@ func (p *Power) CalculatePowerCost() {
 	p.Cost = total
 }
 
+// DeterminePowerCapacities calculates string values for powers
+func (p *Power) DeterminePowerCapacities() {
+
+	capacitiesMap := map[string]int{
+		"Mass":  25.0,
+		"Range": 10.0,
+		"Speed": 2.0,
+		"Self":  0.0,
+	}
+
+	measuresMap := map[string]string{
+		"Mass":  "kg",
+		"Range": "m",
+		"Speed": "m",
+		"Self":  "",
+	}
+
+	var measure string
+
+	totalDice := p.Dice.Normal + p.Dice.Hard + p.Dice.Wiggle
+
+	for _, q := range p.Qualities {
+		for _, c := range q.Capacities {
+			baseVal := capacitiesMap[c.Type]
+
+			modVal := baseVal
+
+			fmt.Println(modVal)
+
+			// Double value for each die above 1
+			for i := 1; i < totalDice; i++ {
+				modVal = modVal * 2.0
+			}
+
+			fmt.Println(modVal)
+
+			boosterVal := 1.0
+
+			// Apply booster
+			for _, m := range q.Modifiers {
+				if m.Name == "Booster" {
+					boosterVal = float64(m.Level) * 10.0
+				}
+			}
+			// Get final value
+			finalVal := float64(modVal) * boosterVal
+
+			fmt.Println(finalVal)
+
+			if finalVal > 1000.0 {
+				switch {
+				case c.Type == "Range":
+					finalVal = finalVal / 1000.0
+					measure = "km"
+					c.Value = fmt.Sprintf("%.2f%s", finalVal, measure)
+				case c.Type == "Mass":
+					finalVal = finalVal / 1000.0
+					measure = "tons"
+					c.Value = fmt.Sprintf("%.2f%s", finalVal, measure)
+				case c.Type == "Speed":
+					finalVal = finalVal / 1000.0
+					measure = "km"
+					c.Value = fmt.Sprintf("%.2f%s", finalVal, measure)
+				case c.Type == "Self":
+					c.Value = "Self"
+				}
+			} else {
+				measure = measuresMap[c.Type]
+				c.Value = fmt.Sprintf("%.0f%s", finalVal, measure)
+			}
+		} // End Capacities
+	} // End Qualities
+}
+
 // NewPower generates a new empty Power
 func NewPower(t string) *Power {
 
