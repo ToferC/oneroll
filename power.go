@@ -67,10 +67,10 @@ func (p *Power) CalculatePowerCost() {
 // DeterminePowerCapacities calculates string values for powers
 func (p *Power) DeterminePowerCapacities() {
 
-	capacitiesMap := map[string]int{
+	capacitiesMap := map[string]float64{
 		"Mass":  25.0,
 		"Range": 10.0,
-		"Speed": 2.0,
+		"Speed": 2.50,
 		"Self":  0.0,
 	}
 
