@@ -17,7 +17,7 @@ type Character struct {
 	BaseWill     int
 	Willpower    int
 	Skills       map[string]*Skill
-	Archtype     *Archtype
+	Archetype    *Archetype
 	HyperStats   map[string]*HyperStat
 	HyperSkills  map[string]*HyperSkill
 	Permissions  map[string]*Permission
@@ -31,8 +31,8 @@ func (c *Character) String() string {
 
 	text := fmt.Sprintf("\n%s (%d pts)\n", c.Name, c.PointCost)
 
-	if c.Archtype.Type != "" {
-		text += fmt.Sprint(c.Archtype)
+	if c.Archetype.Type != "" {
+		text += fmt.Sprint(c.Archetype)
 	}
 
 	text += "\n\nStats:\n"
@@ -48,7 +48,7 @@ func (c *Character) String() string {
 		text += fmt.Sprintf("%s\n", loc)
 	}
 
-	if len(c.Archtype.Sources) > 0 && len(c.Powers) > 0 {
+	if len(c.Archetype.Sources) > 0 && len(c.Powers) > 0 {
 		text += fmt.Sprintf("\nPowers:\n")
 		for _, p := range c.Powers {
 			text += fmt.Sprintf("%s\n\n", p)
@@ -64,9 +64,9 @@ func (c *Character) CalculateCharacterCost() {
 
 	var cost int
 
-	if len(c.Archtype.Sources) > 0 {
-		c.Archtype.CalculateArchtypeCost()
-		cost += c.Archtype.Cost
+	if len(c.Archetype.Sources) > 0 {
+		c.Archetype.CalculateArchetypeCost()
+		cost += c.Archetype.Cost
 	}
 
 	statistics := []*Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}

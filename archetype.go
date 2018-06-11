@@ -4,8 +4,8 @@ import (
 	"fmt"
 )
 
-// Archtype is a grouping of Sources, Permissions & Intrinsics that defines what powers a character can use
-type Archtype struct {
+// Archetype is a grouping of Sources, Permissions & Intrinsics that defines what powers a character can use
+type Archetype struct {
 	Type        string
 	Sources     []*Source
 	Permissions []*Permission
@@ -13,7 +13,7 @@ type Archtype struct {
 	Cost        int
 }
 
-func (a Archtype) String() string {
+func (a Archetype) String() string {
 	text := fmt.Sprintf("\nArchtype: %s (%dpts)", a.Type, a.Cost)
 
 	text += "\nSources: "
@@ -44,8 +44,8 @@ func (a Archtype) String() string {
 	return text
 }
 
-// CalculateArchtypeCost adds costs from sources, permissions and intrinsics
-func (a *Archtype) CalculateArchtypeCost() {
+// CalculateArchetypeCost adds costs from sources, permissions and intrinsics
+func (a *Archetype) CalculateArchetypeCost() {
 	var c int
 
 	for _, s := range a.Sources {

@@ -7,7 +7,7 @@ func NewWTCharacter(name string) *Character {
 		Name: name,
 	}
 
-	c.Archtype = new(Archtype)
+	c.Archetype = new(Archetype)
 
 	c.Body = &Statistic{
 		Name: "Body",

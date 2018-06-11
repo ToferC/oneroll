@@ -9,14 +9,14 @@ import (
 func main() {
 	c := oneroll.NewWTCharacter("Deacon")
 
-	c.Archtype = &oneroll.Archtype{
+	c.Archetype = &oneroll.Archetype{
 		Type: "Cadaver",
 		Sources: []*oneroll.Source{oneroll.Sources["Genetic"],
 			oneroll.Sources["Technological"]},
 		Permissions: []*oneroll.Permission{oneroll.Permissions["Super"]},
 	}
 
-	c.Archtype.CalculateArchtypeCost()
+	c.Archetype.CalculateArchtypeCost()
 
 	c.Body.Dice.Hard = 3
 	c.Body.Dice.GoFirst = 1
