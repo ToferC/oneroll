@@ -16,8 +16,14 @@ type Quality struct {
 }
 
 func (q Quality) String() string {
-	text := fmt.Sprintf("%s (%s) (%d/die): ",
-		q.Type,
+	text := fmt.Sprintf("%s", q.Type)
+
+	// Add formatting for additional levels of Quality
+	if q.Level > 1 {
+		text += fmt.Sprintf(" +%d ", q.Level-1)
+	}
+
+	text += fmt.Sprintf("(%s) (%d/die): ",
 		q.Description,
 		q.CostPerDie)
 

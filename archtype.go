@@ -269,7 +269,7 @@ var Intrinsics = map[string]*Intrinsic{
 	"Unhealing": &Intrinsic{
 		Name:        "Unhealing",
 		Description: "",
-		Cost:        8,
+		Cost:        -8,
 	},
 	"Vulnerable": &Intrinsic{
 		Name:        "Vulnerable",
