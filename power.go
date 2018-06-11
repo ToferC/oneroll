@@ -42,6 +42,14 @@ func (p *Power) CalculatePowerCost() {
 	b := 0
 
 	for _, q := range p.Qualities {
+
+		// Add Power Capacity Modifier if needed
+		if len(q.Capacities) > 1 {
+			tm := Modifiers["Power Capacity"]
+			tm.Level = len(q.Capacities) - 1
+			q.Modifiers = append(q.Modifiers, tm)
+		}
+
 		for _, m := range q.Modifiers {
 			m.CalculateModifierCost()
 		}
@@ -83,14 +91,10 @@ func (p *Power) DeterminePowerCapacities() {
 
 			modVal := baseVal
 
-			fmt.Println(modVal)
-
 			// Double value for each die above 1
 			for i := 1; i < totalDice; i++ {
 				modVal = modVal * 2.0
 			}
-
-			fmt.Println(modVal)
 
 			boosterVal := 1.0
 
@@ -102,8 +106,6 @@ func (p *Power) DeterminePowerCapacities() {
 			}
 			// Get final value
 			finalVal := float64(modVal) * boosterVal
-
-			fmt.Println(finalVal)
 
 			if finalVal > 1000.0 {
 				switch {

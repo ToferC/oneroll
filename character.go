@@ -59,13 +59,15 @@ func (c *Character) String() string {
 }
 
 // CalculateCharacterCost sums total costs of all character elements
+// Call this on each character update
 func (c *Character) CalculateCharacterCost() {
 
 	var cost int
 
-	c.Archtype.CalculateArchtypeCost()
-
-	cost += c.Archtype.Cost
+	if len(c.Archtype.Sources) > 0 {
+		c.Archtype.CalculateArchtypeCost()
+		cost += c.Archtype.Cost
+	}
 
 	statistics := []*Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
 
@@ -84,6 +86,8 @@ func (c *Character) CalculateCharacterCost() {
 	// HyperSkills
 
 	for _, power := range c.Powers {
+		// Determine power capacities
+		power.DeterminePowerCapacities()
 		power.CalculatePowerCost()
 		cost += power.Cost
 	}

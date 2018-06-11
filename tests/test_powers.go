@@ -98,7 +98,6 @@ func main() {
 	c.Powers = map[string]*oneroll.Power{
 		"Telekinisis": f}
 
-	f.DeterminePowerCapacities()
 	c.CalculateCharacterCost()
 
 	fmt.Println(c)
