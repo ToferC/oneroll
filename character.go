@@ -35,7 +35,7 @@ func (c *Character) String() string {
 		text += fmt.Sprint(c.Archtype)
 	}
 
-	text += "\nStats:\n"
+	text += "\n\nStats:\n"
 
 	text += ShowSkills(c, false)
 
