@@ -14,7 +14,7 @@ type Archtype struct {
 }
 
 func (a Archtype) String() string {
-	text := fmt.Sprintf("Archtype: %s (%dpts)", a.Type, a.Cost)
+	text := fmt.Sprintf("\nArchtype: %s (%dpts)", a.Type, a.Cost)
 
 	text += "\nSources: "
 

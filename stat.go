@@ -4,18 +4,18 @@ import "fmt"
 
 // Statistic represents common attributes possessed by every character
 type Statistic struct {
-	Name string
-	Dice *DiePool
-	Cost int
+	Name      string
+	Dice      *DiePool
+	HyperStat *HyperStat
+	Cost      int
 }
 
 // HyperStat is a modified version of a regular Statistic
 type HyperStat struct {
-	Stat       *Statistic
+	Dice       *DiePool
 	Capacities []*Capacity
 	Modifiers  []*Modifier
 	CostPerDie int
-	Booster    []*Booster
 	Cost       int
 }
 

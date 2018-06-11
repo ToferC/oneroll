@@ -29,13 +29,13 @@ type Character struct {
 // Display character
 func (c *Character) String() string {
 
-	text := fmt.Sprintf("\n%s (%d pts)\n\n", c.Name, c.PointCost)
+	text := fmt.Sprintf("\n%s (%d pts)\n", c.Name, c.PointCost)
 
 	if c.Archtype.Type != "" {
 		text += fmt.Sprint(c.Archtype)
 	}
 
-	text += "\n\nStats:\n"
+	text += "\nStats:\n"
 
 	text += ShowSkills(c, false)
 

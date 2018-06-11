@@ -9,13 +9,13 @@ type Skill struct {
 	Dice           *DiePool
 	ReqSpec        bool
 	Specialization string
+	HyperSkill     *HyperSkill
 	Cost           int
 }
 
 // HyperSkill is a modified version of a regular Skill
 type HyperSkill struct {
 	Name       string
-	LinkStat   *Statistic
 	Dice       *DiePool
 	Capacities []*Capacity
 	Modifier   []*Modifier
