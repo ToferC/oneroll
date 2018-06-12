@@ -29,6 +29,8 @@ type Character struct {
 // Display character
 func (c *Character) String() string {
 
+	statistics := []*Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
+
 	text := fmt.Sprintf("\n%s (%d pts)\n", c.Name, c.PointCost)
 
 	if c.Archetype.Type != "" {
@@ -50,6 +52,19 @@ func (c *Character) String() string {
 
 	if len(c.Archetype.Sources) > 0 && len(c.Powers) > 0 {
 		text += fmt.Sprintf("\nPowers:\n")
+
+		for _, s := range statistics {
+			if s.HyperStat != nil {
+				text += fmt.Sprintf("%s\n\n", s.HyperStat)
+			}
+		}
+
+		for _, s := range c.Skills {
+			if s.HyperSkill != nil {
+				text += fmt.Sprintf("%s\n\n", s.HyperSkill)
+			}
+		}
+
 		for _, p := range c.Powers {
 			text += fmt.Sprintf("%s\n\n", p)
 		}
@@ -58,8 +73,8 @@ func (c *Character) String() string {
 	return text
 }
 
-// CalculateCharacterCost sums total costs of all character elements
-// Call this on each character update
+// CalculateCharacterCost updates the character and sums
+// total costs of all character elements. Call this on each character update
 func (c *Character) CalculateCharacterCost() {
 
 	var cost int
@@ -74,16 +89,22 @@ func (c *Character) CalculateCharacterCost() {
 	for _, stat := range statistics {
 		stat.CalculateStatCost()
 		cost += stat.Cost
-	}
 
-	// Hyperstats
+		if stat.HyperStat != nil {
+			stat.HyperStat.CalculateHyperStatCost()
+			cost += stat.HyperStat.Cost
+		}
+	}
 
 	for _, skill := range c.Skills {
 		skill.CalculateSkillCost()
 		cost += skill.Cost
-	}
 
-	// HyperSkills
+		if skill.HyperSkill != nil {
+			skill.HyperSkill.CalculateHyperSkillCost()
+			cost += skill.HyperSkill.Cost
+		}
+	}
 
 	for _, power := range c.Powers {
 		// Determine power capacities

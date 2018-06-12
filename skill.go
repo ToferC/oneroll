@@ -16,14 +16,36 @@ type Skill struct {
 // HyperSkill is a modified version of a regular Skill
 type HyperSkill struct {
 	Name       string
+	Qualities  []*Quality
 	Dice       *DiePool
-	Capacities []*Capacity
-	Modifier   []*Modifier
+	Effect     string
 	CostPerDie int
 	Cost       int
 }
 
 func (s Skill) String() string {
+
+	td := new(DiePool)
+
+	if s.HyperSkill != nil {
+		td.Normal = s.Dice.Normal + s.HyperSkill.Dice.Normal
+		td.Hard = s.Dice.Hard + s.HyperSkill.Dice.Hard
+		td.Wiggle = s.Dice.Wiggle + s.HyperSkill.Dice.Wiggle
+
+		for _, q := range s.HyperSkill.Qualities {
+			for _, m := range q.Modifiers {
+				if m.Name == "Spray" {
+					td.Spray = m.Level
+				}
+
+				if m.Name == "Go First" {
+					td.GoFirst = m.Level
+				}
+			}
+		}
+	} else {
+		td = s.Dice
+	}
 
 	text := fmt.Sprintf("%s ",
 		s.Name)
@@ -32,25 +54,83 @@ func (s Skill) String() string {
 		text += fmt.Sprintf("[%s] ", s.Specialization)
 	}
 
-	text += fmt.Sprintf(": %dd",
-		s.Dice.Normal,
-	)
+	text += fmt.Sprintf("%s", td)
 
-	if s.Dice.Hard > 0 {
-		text += fmt.Sprintf("+%dhd", s.Dice.Hard)
+	return text
+}
+
+func (hs HyperSkill) String() string {
+	text := fmt.Sprintf("%s %s (", hs.Name, hs.Dice)
+
+	for _, q := range hs.Qualities {
+		text += fmt.Sprintf("%s", string(q.Type[0]))
+		if q.Level > 1 {
+			text += fmt.Sprintf("+%d", q.Level-1)
+		}
 	}
 
-	if s.Dice.Wiggle > 0 {
-		text += fmt.Sprintf("+%dwd", s.Dice.Wiggle)
+	text += fmt.Sprintf(") [%d/die] %dpts",
+		hs.CostPerDie,
+		hs.Cost)
+
+	for _, q := range hs.Qualities {
+		text += fmt.Sprintf("\n%s\n", q)
 	}
 
-	if s.Dice.GoFirst > 0 {
-		text += fmt.Sprintf(" Go First %d", s.Dice.GoFirst)
+	if hs.Effect != "" {
+		text += fmt.Sprintf("\nEffect: %s", hs.Effect)
 	}
 
-	if s.Dice.Spray > 0 {
-		text += fmt.Sprintf(" Spray %d", s.Dice.Spray)
+	return text
+}
+
+// getDiePool returns a diepool based on a Skill and it's associated HyperSkill
+func (s *Skill) getDiePool() *DiePool {
+
+	td := &DiePool{}
+
+	if s.HyperSkill != nil {
+
+		td.Normal = s.Dice.Normal + s.HyperSkill.Dice.Normal
+		td.Hard = s.Dice.Hard + s.HyperSkill.Dice.Hard
+		td.Wiggle = s.Dice.Wiggle + s.HyperSkill.Dice.Wiggle
+
+		for _, q := range s.HyperSkill.Qualities {
+			for _, m := range q.Modifiers {
+				if m.Name == "Spray" {
+					td.Spray = m.Level
+				}
+
+				if m.Name == "Go First" {
+					td.GoFirst = m.Level
+				}
+			}
+		}
+	} else {
+		td = s.Dice
 	}
+	return td
+}
+
+// FormatDiePool returns a die string
+func (s *Skill) FormatDiePool(actions int) string {
+
+	skill := s.getDiePool()
+	stat := s.LinkStat.getDiePool()
+
+	normal := stat.Normal + skill.Normal
+	hard := stat.Hard + skill.Hard
+	wiggle := stat.Wiggle + skill.Wiggle
+	goFirst := Max(stat.GoFirst, skill.GoFirst)
+	spray := Max(stat.Spray, skill.Spray)
+
+	text := fmt.Sprintf("%dac+%dd+%dhd+%dwd+%dgf+%dsp",
+		actions,
+		normal,
+		hard,
+		wiggle,
+		goFirst,
+		spray)
 
 	return text
 }
@@ -94,4 +174,34 @@ func (s *Skill) CalculateSkillCost() {
 	total += b * 4 * s.Dice.Wiggle
 
 	s.Cost = total
+}
+
+// CalculateHyperSkillCost generates and udpates the cost for HypeSKills
+func (hs *HyperSkill) CalculateHyperSkillCost() {
+
+	b := 1
+
+	for _, q := range hs.Qualities {
+
+		// Add Power Capacity Modifier if needed
+		if len(q.Capacities) > 1 {
+			tm := Modifiers["Power Capacity"]
+			tm.Level = len(q.Capacities) - 1
+			q.Modifiers = append(q.Modifiers, tm)
+		}
+
+		for _, m := range q.Modifiers {
+			m.CalculateModifierCost(0)
+		}
+		q.CalculateQualityCost(0)
+		b += q.CostPerDie
+	}
+
+	hs.CostPerDie = b
+
+	total := b * hs.Dice.Normal
+	total += b * 2 * hs.Dice.Hard
+	total += b * 4 * hs.Dice.Wiggle
+
+	hs.Cost = total
 }

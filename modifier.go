@@ -50,16 +50,14 @@ func NewModifier(s string) *Modifier {
 
 // CalculateModifierCost updates the cost per level for Modifiers w/ levels
 // Called from Power.PowerCost()
-func (m *Modifier) CalculateModifierCost() {
-
-	var c int
+func (m *Modifier) CalculateModifierCost(b int) {
 
 	if m.RequiresLevel {
-		c = m.CostPerLevel * m.Level
+		b = m.CostPerLevel * m.Level
 	} else {
-		c = m.CostPerLevel
+		b = m.CostPerLevel
 	}
-	m.Cost = c
+	m.Cost = b
 }
 
 // Modifiers creates map of standard WT extras & Flaws

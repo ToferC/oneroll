@@ -7,12 +7,13 @@ import (
 
 // Quality is either Attack, Defend or Useful
 type Quality struct {
-	Type        string
-	Description string
-	Level       int
-	Capacities  []*Capacity
-	Modifiers   []*Modifier
-	CostPerDie  int
+	Type       string
+	Name       string
+	Dice       *DiePool
+	Level      int
+	Capacities []*Capacity
+	Modifiers  []*Modifier
+	CostPerDie int
 }
 
 func (q Quality) String() string {
@@ -24,30 +25,59 @@ func (q Quality) String() string {
 	}
 
 	text += fmt.Sprintf("(%s) (%d/die): ",
-		q.Description,
+		q.Name,
 		q.CostPerDie)
 
-	text += fmt.Sprint("Capacities:")
+	if len(q.Capacities) > 0 {
 
-	for _, c := range q.Capacities {
-		text += fmt.Sprintf(" %s", c)
-	}
+		text += fmt.Sprint("Capacities:")
 
-	text += fmt.Sprint("; Extras & Flaws:")
-
-	for _, m := range q.Modifiers {
-		if m.CostPerLevel > 0 {
-			text += fmt.Sprintf(" %s,", m)
+		for _, c := range q.Capacities {
+			text += fmt.Sprintf(" %s", c)
 		}
 	}
 
-	for _, m := range q.Modifiers {
-		if m.CostPerLevel < 0 {
-			text += fmt.Sprintf(" %s,", m)
+	if len(q.Modifiers) > 0 {
+		text += fmt.Sprint("; Extras & Flaws:")
+
+		for _, m := range q.Modifiers {
+			if m.CostPerLevel > 0 {
+				text += fmt.Sprintf(" %s,", m)
+			}
+		}
+
+		for _, m := range q.Modifiers {
+			if m.CostPerLevel < 0 {
+				text += fmt.Sprintf(" %s,", m)
+			}
 		}
 	}
 
 	text = strings.TrimSuffix(text, ",")
+	return text
+}
+
+// FormatDiePool returns a die string
+func (q *Quality) FormatDiePool(actions int) string {
+
+	for _, m := range q.Modifiers {
+		if m.Name == "Spray" {
+			q.Dice.Spray = m.Level
+		}
+
+		if m.Name == "Go First" {
+			q.Dice.GoFirst = m.Level
+		}
+	}
+
+	text := fmt.Sprintf("%dac+%dd+%dhd+%dwd+%dgf+%dsp",
+		actions,
+		q.Dice.Normal,
+		q.Dice.Hard,
+		q.Dice.Wiggle,
+		q.Dice.GoFirst,
+		q.Dice.Spray)
+
 	return text
 }
 
@@ -57,7 +87,7 @@ func NewQuality(t string) *Quality {
 	q := new(Quality)
 
 	q.Type = t
-	q.Description = ""
+	q.Name = ""
 	q.CostPerDie = 2
 	q.Level = 1
 	q.Capacities = []*Capacity{}
@@ -70,8 +100,7 @@ func NewQuality(t string) *Quality {
 
 // CalculateQualityCost determines the cost of a Power Quality
 // Called from Power.PowerCost()
-func (q *Quality) CalculateQualityCost() {
-	b := 2
+func (q *Quality) CalculateQualityCost(b int) {
 
 	b += q.Level - 1
 

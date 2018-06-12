@@ -4,12 +4,13 @@ import "fmt"
 
 // Power is a non-standard ability or miracle
 type Power struct {
-	Name      string
-	Qualities []*Quality
-	Dice      *DiePool
-	Effect    string
-	Dud       bool
-	Cost      int
+	Name       string
+	Qualities  []*Quality
+	Dice       *DiePool
+	Effect     string
+	Dud        bool
+	Cost       int
+	CostPerDie int
 }
 
 func (p Power) String() string {
@@ -25,13 +26,17 @@ func (p Power) String() string {
 		}
 	}
 
-	text += fmt.Sprintf(") %dpts\n", p.Cost)
+	text += fmt.Sprintf(") [%d/die] %dpts\n",
+		p.CostPerDie,
+		p.Cost)
 
 	for _, q := range p.Qualities {
 		text += fmt.Sprintln(q)
 	}
 
-	text += fmt.Sprintf("Effect: %s", p.Effect)
+	if p.Effect != "" {
+		text += fmt.Sprintf("Effect: %s", p.Effect)
+	}
 
 	return text
 }
@@ -43,6 +48,11 @@ func (p *Power) CalculatePowerCost() {
 
 	for _, q := range p.Qualities {
 
+		// Update Quality DiePool if needed
+		if q.Dice == nil {
+			q.Dice = p.Dice
+		}
+
 		// Add Power Capacity Modifier if needed
 		if len(q.Capacities) > 1 {
 			tm := Modifiers["Power Capacity"]
@@ -51,11 +61,13 @@ func (p *Power) CalculatePowerCost() {
 		}
 
 		for _, m := range q.Modifiers {
-			m.CalculateModifierCost()
+			m.CalculateModifierCost(0)
 		}
-		q.CalculateQualityCost()
+		q.CalculateQualityCost(2)
 		b += q.CostPerDie
 	}
+
+	p.CostPerDie = b
 
 	total := b * p.Dice.Normal
 	total += b * 2 * p.Dice.Hard

@@ -16,10 +16,39 @@ func main() {
 		Permissions: []*oneroll.Permission{oneroll.Permissions["Super"]},
 	}
 
-	c.Archetype.CalculateArchtypeCost()
+	c.Archetype.CalculateArchetypeCost()
 
-	c.Body.Dice.Hard = 3
-	c.Body.Dice.GoFirst = 1
+	// Test HyperStat
+	boost1 := oneroll.Modifiers["Booster"]
+	boost1.Level = 2
+
+	bgf := oneroll.Modifiers["Go First"]
+	bgf.Level = 2
+
+	hbq := oneroll.Quality{
+		Type:       "Attack",
+		Name:       "Hyper-Body",
+		Level:      3,
+		CostPerDie: 2,
+		Modifiers:  []*oneroll.Modifier{boost1, bgf},
+	}
+
+	c.Body.HyperStat = &oneroll.HyperStat{
+		Name: "Hyper-Body",
+		Dice: &oneroll.DiePool{
+			Hard: 3,
+		},
+		Qualities: []*oneroll.Quality{&hbq},
+		Effect:    "Attacks fast and does W+2S.",
+	}
+
+	c.Body.HyperStat.Dice.Wiggle = 1
+
+	useful := oneroll.Quality{
+		Type:  "Useful",
+		Name:  "Hyper-Athletics",
+		Level: 1,
+	}
 
 	c.Skills["Athletics"] = &oneroll.Skill{
 		Name:     "Athletics",
@@ -28,6 +57,15 @@ func main() {
 			Normal: 3,
 			Hard:   0,
 			Wiggle: 0,
+		},
+		HyperSkill: &oneroll.HyperSkill{
+			Name: "Hyper_Athmetics",
+			Dice: &oneroll.DiePool{
+				Hard: 2,
+			},
+			Qualities: []*oneroll.Quality{
+				&useful,
+			},
 		},
 	}
 
@@ -51,11 +89,11 @@ func main() {
 	boost.Level = 4
 
 	a := oneroll.Quality{
-		Type:        "Attack",
-		Description: "TK Blast",
-		Level:       3,
-		CostPerDie:  2,
-		Modifiers:   []*oneroll.Modifier{area, ifthen},
+		Type:       "Attack",
+		Name:       "TK Blast",
+		Level:      3,
+		CostPerDie: 2,
+		Modifiers:  []*oneroll.Modifier{area, ifthen},
 	}
 
 	rng := oneroll.Capacity{
@@ -73,11 +111,11 @@ func main() {
 	}
 
 	u := oneroll.Quality{
-		Type:        "Useful",
-		Description: "Fly",
-		Level:       1,
-		CostPerDie:  2,
-		Modifiers:   []*oneroll.Modifier{gf, boost},
+		Type:       "Useful",
+		Name:       "Fly",
+		Level:      1,
+		CostPerDie: 2,
+		Modifiers:  []*oneroll.Modifier{gf, boost},
 	}
 
 	u.Capacities = []*oneroll.Capacity{
@@ -91,8 +129,6 @@ func main() {
 
 	f.Qualities = []*oneroll.Quality{&a, &u}
 
-	f.CalculatePowerCost()
-
 	f.Effect = "Fly and throw TK blasts."
 
 	c.Powers = map[string]*oneroll.Power{
@@ -101,5 +137,33 @@ func main() {
 	c.CalculateCharacterCost()
 
 	fmt.Println(c)
+
+	activePower := c.Powers["Telekinisis"].Qualities[0]
+
+	ds := activePower.FormatDiePool(1)
+
+	actionType := fmt.Sprintf("%s %s", activePower.Type, activePower.Name)
+
+	r := oneroll.Roll{
+		Actor:  c,
+		Action: actionType,
+	}
+
+	r.Resolve(ds)
+
+	fmt.Println(r)
+
+	r1 := oneroll.Roll{
+		Actor:  c,
+		Action: c.Skills["Athletics"].Name,
+	}
+
+	ath := c.Skills["Athletics"]
+
+	athString := ath.FormatDiePool(1)
+
+	r1.Resolve(athString)
+
+	fmt.Println(r1)
 
 }
