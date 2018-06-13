@@ -50,7 +50,7 @@ func (hs HyperSkill) String() string {
 		}
 	}
 
-	text += fmt.Sprintf(") [%d/die] %dpts",
+	text += fmt.Sprintf(") [+%d/die] %dpts",
 		hs.CostPerDie,
 		hs.Cost)
 

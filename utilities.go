@@ -78,7 +78,7 @@ func ParseNumRolls(s string) (int, error) {
 
 // SkillRated returns true if a skill has any points in it
 func SkillRated(s *Skill) bool {
-	if s.Dice.Normal+s.Dice.Hard+s.Dice.Wiggle+s.Dice.Spray+s.Dice.GoFirst > 0 {
+	if s.Dice.Normal+s.Dice.Hard+s.Dice.Wiggle > 0 {
 		return true
 	}
 	return false
