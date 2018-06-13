@@ -5,6 +5,7 @@ import "fmt"
 // Skill represents specific training
 type Skill struct {
 	Name           string
+	Quality        *Quality
 	LinkStat       *Statistic
 	Dice           *DiePool
 	ReqSpec        bool
