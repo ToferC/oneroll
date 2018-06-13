@@ -50,7 +50,7 @@ func (c *Character) String() string {
 		text += fmt.Sprintf("%s\n", loc)
 	}
 
-	if len(c.Archetype.Sources) > 0 && len(c.Powers) > 0 {
+	if len(c.Archetype.Sources) > 0 {
 		text += fmt.Sprintf("\nPowers:\n")
 
 		for _, s := range statistics {
