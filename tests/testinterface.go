@@ -1,22 +1,24 @@
 package main
 
 import (
-  "fmt"
-  "github.com/toferc/oneroll"
+	"fmt"
+
+	"github.com/toferc/oneroll"
 )
 
+// Sets interface on dieFormat() behavior
 type formatter interface {
-  dieFormat() string
+	dieFormat() string
 }
 
 type St struct {
-  Dice *oneroll.DiePool
+	Dice *oneroll.DiePool
 }
 
 func (s *St) dieFormat() string {
 
-actions := 1
-  normal := s.Dice.Normal
+	actions := 1
+	normal := s.Dice.Normal
 	hard := s.Dice.Hard
 	wiggle := s.Dice.Wiggle
 	goFirst := s.Dice.GoFirst
@@ -34,13 +36,13 @@ actions := 1
 }
 
 type Po struct {
-  Dice *oneroll.DiePool
+	Dice *oneroll.DiePool
 }
 
 func (p *Po) dieFormat() string {
 
-actions := 1
-  normal := p.Dice.Normal
+	actions := 1
+	normal := p.Dice.Normal
 	hard := p.Dice.Hard
 	wiggle := p.Dice.Wiggle
 	goFirst := p.Dice.GoFirst
@@ -57,22 +59,23 @@ actions := 1
 	return text
 }
 
+// Call printFormat from St or Po to call dieFormat
 func printFormat(f formatter) string {
-  return f.dieFormat()
+	return f.dieFormat()
 }
 
 func main() {
-  p := Po{Dice: &oneroll.DiePool{
-    Normal: 4,
-    Hard: 2,
-    },
-  }
-  fmt.Println(printFormat(&p))
+	p := Po{Dice: &oneroll.DiePool{
+		Normal: 4,
+		Hard:   2,
+	},
+	}
+	fmt.Println(printFormat(&p))
 
-  s := St{Dice: &oneroll.DiePool{
-      Normal: 2,
-      Hard: 4,
-      },
-    }
-  fmt.Println(printFormat(&s))
+	s := St{Dice: &oneroll.DiePool{
+		Normal: 2,
+		Hard:   4,
+	},
+	}
+	fmt.Println(printFormat(&s))
 }

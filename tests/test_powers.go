@@ -16,7 +16,7 @@ func main() {
 		Permissions: []*oneroll.Permission{oneroll.Permissions["Super"]},
 	}
 
-	c.Archetype.CalculateArchetypeCost()
+	oneroll.UpdateCost(c.Archetype)
 
 	// Test HyperStat
 	boost1 := oneroll.Modifiers["Booster"]
@@ -134,7 +134,7 @@ func main() {
 	c.Powers = map[string]*oneroll.Power{
 		"Telekinisis": f}
 
-	c.CalculateCharacterCost()
+	oneroll.UpdateCost(c)
 
 	fmt.Println(c)
 
