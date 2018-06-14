@@ -33,16 +33,15 @@ func main() {
 		Modifiers:  []*oneroll.Modifier{boost1, bgf},
 	}
 
-	c.Body.HyperStat = &oneroll.HyperStat{
+	c.Statistics["Body"].HyperStat = &oneroll.HyperStat{
 		Name: "Hyper-Body",
 		Dice: &oneroll.DiePool{
-			Hard: 3,
+			Hard:   3,
+			Wiggle: 1,
 		},
 		Qualities: []*oneroll.Quality{&hbq},
 		Effect:    "Attacks fast and does W+2S.",
 	}
-
-	c.Body.HyperStat.Dice.Wiggle = 1
 
 	useful := oneroll.Quality{
 		Type:  "Useful",
@@ -50,24 +49,18 @@ func main() {
 		Level: 1,
 	}
 
-	c.Skills["Athletics"] = &oneroll.Skill{
-		Name:     "Athletics",
-		LinkStat: c.Body,
-		Dice: &oneroll.DiePool{
-			Normal: 3,
-			Hard:   0,
-			Wiggle: 0,
-		},
-		HyperSkill: &oneroll.HyperSkill{
-			Name: "Hyper_Athmetics",
+	c.Skills["Athletics"].Dice.Normal = 3
+
+	c.Skills["Athletics"].HyperSkill =
+		&oneroll.HyperSkill{
+			Name: "Hyper_Athletics",
 			Dice: &oneroll.DiePool{
 				Hard: 2,
 			},
 			Qualities: []*oneroll.Quality{
 				&useful,
 			},
-		},
-	}
+		}
 
 	f := oneroll.NewPower("Telekinisis")
 

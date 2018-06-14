@@ -8,12 +8,7 @@ import (
 type Character struct {
 	ID           int64
 	Name         string
-	Body         *Statistic
-	Coordination *Statistic
-	Sense        *Statistic
-	Mind         *Statistic
-	Command      *Statistic
-	Charm        *Statistic
+	Statistics   map[string]*Statistic
 	BaseWill     int
 	Willpower    int
 	Skills       map[string]*Skill
@@ -29,7 +24,7 @@ type Character struct {
 // Display character
 func (c *Character) String() string {
 
-	statistics := []*Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
+	statistics := c.Statistics
 
 	text := fmt.Sprintf("\n%s (%d pts)\n", c.Name, c.PointCost)
 
@@ -41,7 +36,7 @@ func (c *Character) String() string {
 
 	text += ShowSkills(c, false)
 
-	text += fmt.Sprintf("\nBase Will:%d\n", c.BaseWill)
+	text += fmt.Sprintf("\nBase Will: %d\n", c.BaseWill)
 	text += fmt.Sprintf("Willpower: %d\n", c.Willpower)
 
 	text += fmt.Sprintf("\nHit Locations:\n")
@@ -84,9 +79,7 @@ func (c *Character) CalculateCost() {
 		cost += c.Archetype.Cost
 	}
 
-	statistics := []*Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
-
-	for _, stat := range statistics {
+	for _, stat := range c.Statistics {
 		UpdateCost(stat)
 		cost += stat.Cost
 
@@ -113,8 +106,11 @@ func (c *Character) CalculateCost() {
 		cost += power.Cost
 	}
 
-	comTotal := c.Command.Dice.Normal + c.Command.Dice.Hard + c.Command.Dice.Wiggle
-	charmTotal := c.Charm.Dice.Normal + c.Charm.Dice.Hard + c.Charm.Dice.Wiggle
+	command := c.Statistics["Command"]
+	charm := c.Statistics["Charm"]
+
+	comTotal := command.Dice.Normal + command.Dice.Hard + command.Dice.Wiggle
+	charmTotal := charm.Dice.Normal + charm.Dice.Hard + charm.Dice.Wiggle
 
 	cost += 3*c.BaseWill - (comTotal + charmTotal)
 	cost += c.Willpower - c.BaseWill

@@ -9,45 +9,57 @@ func NewWTCharacter(name string) *Character {
 
 	c.Archetype = new(Archetype)
 
-	c.Body = &Statistic{
-		Name: "Body",
-		Dice: &DiePool{
-			Normal:  2,
-			Hard:    0,
-			GoFirst: 0,
+	c.Statistics = map[string]*Statistic{
+		"Body": &Statistic{
+			Name: "Body",
+			Dice: &DiePool{
+				Normal:  2,
+				Hard:    0,
+				GoFirst: 0,
+			},
+		},
+		"Coordination": &Statistic{
+			Name: "Coordination",
+			Dice: &DiePool{
+				Normal: 2,
+			},
+		},
+		"Sense": &Statistic{
+			Name: "Sense",
+			Dice: &DiePool{
+				Normal: 2,
+			},
+		},
+		"Mind": &Statistic{
+			Name: "Mind",
+			Dice: &DiePool{
+				Normal: 2,
+			},
+		},
+		"Command": &Statistic{
+			Name: "Command",
+			Dice: &DiePool{
+				Normal: 2,
+			},
+			EffectsWill: true,
+		},
+		"Charm": &Statistic{
+			Name: "Charm",
+			Dice: &DiePool{
+				Normal: 2,
+			},
+			EffectsWill: true,
 		},
 	}
 
-	c.Coordination = &Statistic{
-		Name: "Coordination",
-		Dice: &DiePool{
-			Normal: 2,
-		},
-	}
-	c.Sense = &Statistic{
-		Name: "Sense",
-		Dice: &DiePool{
-			Normal: 2,
-		},
-	}
-	c.Mind = &Statistic{
-		Name: "Mind",
-		Dice: &DiePool{
-			Normal: 2,
-		},
-	}
-	c.Command = &Statistic{
-		Name: "Command",
-		Dice: &DiePool{
-			Normal: 2,
-		},
-	}
-	c.Charm = &Statistic{
-		Name: "Charm",
-		Dice: &DiePool{
-			Normal: 2,
-		},
-	}
+	// Declare stat pointers
+
+	body := c.Statistics["Body"]
+	coordination := c.Statistics["Coordination"]
+	sense := c.Statistics["Sense"]
+	mind := c.Statistics["Mind"]
+	command := c.Statistics["Command"]
+	charm := c.Statistics["Charm"]
 
 	c.HitLocations = map[string]*Location{
 		"Head": &Location{
@@ -112,7 +124,12 @@ func NewWTCharacter(name string) *Character {
 		},
 	}
 
-	c.BaseWill = c.Command.Dice.Normal + c.Charm.Dice.Normal
+	for _, stat := range c.Statistics {
+		if stat.EffectsWill {
+			c.BaseWill += stat.Dice.Normal
+		}
+	}
+
 	c.Willpower = c.BaseWill
 
 	c.Skills = map[string]*Skill{
@@ -123,7 +140,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Body,
+			LinkStat: body,
 			Dice: &DiePool{
 				Normal: 0,
 				Hard:   0,
@@ -136,7 +153,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Defend",
 				Level: 1,
 			},
-			LinkStat: c.Body,
+			LinkStat: body,
 			Dice: &DiePool{
 				Normal: 0,
 				Hard:   0,
@@ -149,7 +166,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Attack",
 				Level: 1,
 			},
-			LinkStat: c.Body,
+			LinkStat: body,
 			Dice: &DiePool{
 				Normal: 0,
 				Hard:   0,
@@ -162,7 +179,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Body,
+			LinkStat: body,
 			Dice: &DiePool{
 				Normal: 0,
 				Hard:   0,
@@ -175,7 +192,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Attack",
 				Level: 1,
 			},
-			LinkStat: c.Body,
+			LinkStat: body,
 			Dice: &DiePool{
 				Normal: 0,
 				Hard:   0,
@@ -191,7 +208,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Defend",
 				Level: 1,
 			},
-			LinkStat: c.Coordination,
+			LinkStat: coordination,
 			Dice: &DiePool{
 				Normal: 0,
 				Hard:   0,
@@ -203,7 +220,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Coordination,
+			LinkStat: coordination,
 			Dice: &DiePool{
 				Normal: 0,
 				Hard:   0,
@@ -217,7 +234,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Attack",
 				Level: 1,
 			},
-			LinkStat: c.Coordination,
+			LinkStat: coordination,
 			Dice: &DiePool{
 				Normal: 0,
 				Hard:   0,
@@ -231,7 +248,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Coordination,
+			LinkStat: coordination,
 			Dice: &DiePool{
 				Normal: 0,
 				Hard:   0,
@@ -244,7 +261,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Sense,
+			LinkStat: sense,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -255,7 +272,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Sense,
+			LinkStat: sense,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -266,7 +283,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Sense,
+			LinkStat: sense,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -278,7 +295,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Mind,
+			LinkStat: mind,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -289,7 +306,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Mind,
+			LinkStat: mind,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -302,7 +319,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Mind,
+			LinkStat: mind,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -315,7 +332,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Mind,
+			LinkStat: mind,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -326,7 +343,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Mind,
+			LinkStat: mind,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -337,7 +354,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Mind,
+			LinkStat: mind,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -348,7 +365,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Mind,
+			LinkStat: mind,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -359,7 +376,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Mind,
+			LinkStat: mind,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -370,7 +387,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Mind,
+			LinkStat: mind,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -381,7 +398,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Mind,
+			LinkStat: mind,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -393,7 +410,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Charm,
+			LinkStat: charm,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -404,7 +421,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Charm,
+			LinkStat: charm,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -417,7 +434,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Charm,
+			LinkStat: charm,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -429,7 +446,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Command,
+			LinkStat: command,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -440,7 +457,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Command,
+			LinkStat: command,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -451,7 +468,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Command,
+			LinkStat: command,
 			Dice: &DiePool{
 				Normal: 0,
 			},
@@ -462,7 +479,7 @@ func NewWTCharacter(name string) *Character {
 				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: c.Command,
+			LinkStat: command,
 			Dice: &DiePool{
 				Normal: 0,
 			},
