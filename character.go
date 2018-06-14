@@ -19,6 +19,7 @@ type Character struct {
 	Powers       map[string]*Power
 	HitLocations map[string]*Location
 	PointCost    int
+	InPlay       bool
 }
 
 // Display character
@@ -106,14 +107,26 @@ func (c *Character) CalculateCost() {
 		cost += power.Cost
 	}
 
-	command := c.Statistics["Command"]
-	charm := c.Statistics["Charm"]
+	// Update BaseWill automaticallly if Character isn't in play
 
-	comTotal := command.Dice.Normal + command.Dice.Hard + command.Dice.Wiggle
-	charmTotal := charm.Dice.Normal + charm.Dice.Hard + charm.Dice.Wiggle
+	calcBaseWill := 0
 
-	cost += 3*c.BaseWill - (comTotal + charmTotal)
-	cost += c.Willpower - c.BaseWill
+	for _, stat := range c.Statistics {
+		if stat.EffectsWill {
+			calcBaseWill += SumDice(stat.Dice)
+			if stat.HyperStat != nil {
+				calcBaseWill += SumDice(stat.HyperStat.Dice)
+			}
+		}
+	}
+
+	if !c.InPlay {
+		c.BaseWill = calcBaseWill
+		c.Willpower = calcBaseWill
+	} else {
+		cost += 3*c.BaseWill - calcBaseWill
+		cost += c.Willpower - c.BaseWill
+	}
 
 	c.PointCost = cost
 }
