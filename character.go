@@ -16,13 +16,13 @@ type Character struct {
 	Charm        *Statistic
 	BaseWill     int
 	Willpower    int
-	Skills       map[string]*Skill `sql:"type:jsonb"`
+	Skills       map[string]*Skill
 	Archetype    *Archetype
-	HyperStats   map[string]*HyperStat  `sql:"type:jsonb"`
-	HyperSkills  map[string]*HyperSkill `sql:"type:jsonb"`
-	Permissions  map[string]*Permission `sql:"type:jsonb"`
-	Powers       map[string]*Power      `sql:"type:jsonb"`
-	HitLocations map[string]*Location   `sql:"type:jsonb"`
+	HyperStats   map[string]*HyperStat
+	HyperSkills  map[string]*HyperSkill
+	Permissions  map[string]*Permission
+	Powers       map[string]*Power
+	HitLocations map[string]*Location
 	PointCost    int
 }
 
