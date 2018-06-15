@@ -9,6 +9,9 @@ func NewWTCharacter(name string) *Character {
 
 	c.Archetype = new(Archetype)
 
+	// WTStats sets the order for Character.Statistics
+	c.StatMap = []string{"Body", "Coordination", "Sense", "Mind", "Command", "Charm"}
+
 	c.Statistics = map[string]*Statistic{
 		"Body": &Statistic{
 			Name: "Body",
@@ -60,6 +63,9 @@ func NewWTCharacter(name string) *Character {
 	mind := c.Statistics["Mind"]
 	command := c.Statistics["Command"]
 	charm := c.Statistics["Charm"]
+
+	c.LocationMap = []string{"Head", "Body", "Left Arm", "Right Arm",
+		"Left Leg", "Right Leg"}
 
 	c.HitLocations = map[string]*Location{
 		"Head": &Location{

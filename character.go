@@ -9,6 +9,7 @@ type Character struct {
 	ID           int64
 	Name         string
 	Statistics   map[string]*Statistic
+	StatMap      []string
 	BaseWill     int
 	Willpower    int
 	Skills       map[string]*Skill
@@ -18,14 +19,13 @@ type Character struct {
 	Permissions  map[string]*Permission
 	Powers       map[string]*Power
 	HitLocations map[string]*Location
+	LocationMap  []string
 	PointCost    int
 	InPlay       bool
 }
 
 // Display character
 func (c *Character) String() string {
-
-	statistics := c.Statistics
 
 	text := fmt.Sprintf("\n%s (%d pts)\n", c.Name, c.PointCost)
 
@@ -42,14 +42,15 @@ func (c *Character) String() string {
 
 	text += fmt.Sprintf("\nHit Locations:\n")
 
-	for _, loc := range c.HitLocations {
-		text += fmt.Sprintf("%s\n", loc)
+	for _, loc := range c.LocationMap {
+		text += fmt.Sprintf("%s\n", c.HitLocations[loc])
 	}
 
 	if len(c.Archetype.Sources) > 0 {
 		text += fmt.Sprintf("\nPowers:\n")
 
-		for _, s := range statistics {
+		for _, stat := range c.StatMap {
+			s := c.Statistics[stat]
 			if s.HyperStat != nil {
 				text += fmt.Sprintf("%s\n\n", s.HyperStat)
 			}

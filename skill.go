@@ -122,7 +122,8 @@ func ShowSkills(c *Character, allSkills bool) string {
 
 	var text string
 
-	for _, stat := range c.Statistics {
+	for _, s := range c.StatMap {
+		stat := c.Statistics[s]
 		text += fmt.Sprintf("%s\n", stat)
 		for _, skill := range c.Skills {
 			if skill.LinkStat.Name == stat.Name {
