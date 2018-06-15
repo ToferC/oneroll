@@ -64,6 +64,14 @@ func (c *Character) String() string {
 
 		for _, p := range c.Powers {
 			text += fmt.Sprintf("%s\n\n", p)
+
+			for _, q := range p.Qualities {
+				text += fmt.Sprintln(q)
+			}
+
+			if p.Effect != "" {
+				text += fmt.Sprintf("Effect: %s", p.Effect)
+			}
 		}
 	}
 
