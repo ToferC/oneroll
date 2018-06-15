@@ -1,6 +1,9 @@
 package oneroll
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 // Skill represents specific training
 type Skill struct {
@@ -125,19 +128,30 @@ func ShowSkills(c *Character, allSkills bool) string {
 	for _, s := range c.StatMap {
 		stat := c.Statistics[s]
 		text += fmt.Sprintf("%s\n", stat)
+
+		// Create Skill Mapping for stat
+		skillMap := []string{}
+
 		for _, skill := range c.Skills {
 			if skill.LinkStat.Name == stat.Name {
+
 				if allSkills {
+					skillMap = append(skillMap, skill.Name)
 					// We want all skills
 					text += fmt.Sprintf("-- %s\n", skill)
 				} else {
 					// We only want rated skills
 					if SkillRated(skill) {
-						text += fmt.Sprintf("-- %s\n", skill)
+						skillMap = append(skillMap, skill.Name)
 					}
 				}
 			}
 		}
+		sort.Strings(skillMap)
+		for _, skill := range skillMap {
+			text += fmt.Sprintf("-- %s\n", c.Skills[skill])
+		}
+
 	}
 	return text
 }
