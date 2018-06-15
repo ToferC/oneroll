@@ -132,13 +132,16 @@ func ShowSkills(c *Character, allSkills bool) string {
 		// Create Skill Mapping for stat
 		skillMap := []string{}
 
+		// Start with all skills
 		for _, skill := range c.Skills {
+
+			// Narrow down to only Skills with the right LinkStat
 			if skill.LinkStat.Name == stat.Name {
 
+				// Select all or only rated skills
 				if allSkills {
-					skillMap = append(skillMap, skill.Name)
 					// We want all skills
-					text += fmt.Sprintf("-- %s\n", skill)
+					skillMap = append(skillMap, skill.Name)
 				} else {
 					// We only want rated skills
 					if SkillRated(skill) {
@@ -147,6 +150,7 @@ func ShowSkills(c *Character, allSkills bool) string {
 				}
 			}
 		}
+		// Sort the map of Skills in Alphabetical order
 		sort.Strings(skillMap)
 		for _, skill := range skillMap {
 			text += fmt.Sprintf("-- %s\n", c.Skills[skill])
