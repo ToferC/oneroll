@@ -23,7 +23,9 @@ func main() {
 	boost1.Level = 2
 
 	bgf := oneroll.Modifiers["Go First"]
-	bgf.Level = 2
+	bgf.Level = 1
+
+	baseW := oneroll.Modifiers["Base Will Cost"]
 
 	hbq := oneroll.Quality{
 		Type:       "Attack",
@@ -44,9 +46,10 @@ func main() {
 	}
 
 	useful := oneroll.Quality{
-		Type:  "Useful",
-		Name:  "Hyper-Athletics",
-		Level: 1,
+		Type:      "Useful",
+		Name:      "Hyper-Athletics",
+		Level:     1,
+		Modifiers: []*oneroll.Modifier{baseW},
 	}
 
 	c.Skills["Athletics"].Dice.Normal = 3

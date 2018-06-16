@@ -178,7 +178,7 @@ func (s *Skill) CalculateCost() {
 // CalculateCost generates and udpates the cost for HypeSKills
 func (hs *HyperSkill) CalculateCost() {
 
-	b := 1
+	b := 0 // base of 1, but minimum of 1 Quality with minimum cost of 1
 
 	for _, q := range hs.Qualities {
 
