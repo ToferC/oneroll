@@ -65,7 +65,7 @@ func (c *Character) String() string {
 					text = strings.TrimSuffix(text, ",")
 					text += fmt.Sprintf("(%dpts)", cost)
 				}
-				text += fmt.Sprint("\n")
+				text += fmt.Sprint("\n\n")
 			}
 		}
 
