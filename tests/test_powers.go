@@ -49,7 +49,7 @@ func main() {
 		Type:      "Useful",
 		Name:      "Hyper-Athletics",
 		Level:     1,
-		Modifiers: []*oneroll.Modifier{baseW},
+		Modifiers: []*oneroll.Modifier{baseW, bgf},
 	}
 
 	c.Skills["Athletics"].Dice.Normal = 3
@@ -64,6 +64,10 @@ func main() {
 				&useful,
 			},
 		}
+
+	body := c.Statistics["Body"]
+
+	body.Modifiers = append(body.Modifiers, bgf)
 
 	f := oneroll.NewPower("Telekinisis")
 
