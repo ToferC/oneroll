@@ -94,7 +94,7 @@ func (c *Character) String() string {
 			}
 
 			if p.Effect != "" {
-				text += fmt.Sprintf("Effect: %s", p.Effect)
+				text += fmt.Sprintf("Effect: %s\n", p.Effect)
 			}
 		}
 	}
