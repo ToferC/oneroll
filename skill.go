@@ -14,6 +14,7 @@ type Skill struct {
 	ReqSpec        bool
 	Specialization string
 	HyperSkill     *HyperSkill
+	Modifiers      []*Modifier
 	Cost           int
 }
 

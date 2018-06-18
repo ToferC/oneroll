@@ -9,6 +9,7 @@ type Statistic struct {
 	Name        string
 	Dice        *DiePool
 	HyperStat   *HyperStat
+	Modifiers   *[]Modifier
 	EffectsWill bool
 	Cost        int
 }
