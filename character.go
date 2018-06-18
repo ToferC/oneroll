@@ -87,7 +87,7 @@ func (c *Character) String() string {
 		}
 
 		for _, p := range c.Powers {
-			text += fmt.Sprintf("%s", p)
+			text += fmt.Sprintf("\n%s", p)
 
 			for _, q := range p.Qualities {
 				text += fmt.Sprintln(q)
