@@ -7,6 +7,8 @@ func NewWTCharacter(name string) *Character {
 		Name: name,
 	}
 
+	c.Setting = "WT"
+
 	c.Archetype = new(Archetype)
 
 	// WTStats sets the order for Character.Statistics

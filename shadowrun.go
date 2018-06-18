@@ -7,6 +7,8 @@ func NewSRCharacter(name string) *Character {
 		Name: name,
 	}
 
+	c.Setting = "SR"
+
 	c.Archetype = new(Archetype)
 
 	// WTStats sets the order for Character.Statistics
