@@ -57,7 +57,7 @@ func (c *Character) String() string {
 				if len(s.Modifiers) > 0 {
 					text += fmt.Sprintf("+ added modifiers to main stat: ")
 					for _, m := range s.Modifiers {
-						text += fmt.Sprintf("%s (%d/die) ", m.Name, m.Cost)
+						text += fmt.Sprintf("%s (%d/die) (%dpts)", m.Name, m.Cost, m.Cost*SumDice(s.Dice))
 					}
 				}
 				text += fmt.Sprint("\n")
@@ -70,7 +70,7 @@ func (c *Character) String() string {
 				if len(s.Modifiers) > 0 {
 					text += fmt.Sprintf("+ added modifiers to main stat: ")
 					for _, m := range s.Modifiers {
-						text += fmt.Sprintf("%s (%d/die) ", m.Name, m.Cost)
+						text += fmt.Sprintf("%s (%d/die) (%dpts)", m.Name, m.Cost, m.Cost*SumDice(s.Dice))
 					}
 				}
 				text += fmt.Sprint("\n")
