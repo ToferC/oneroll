@@ -24,6 +24,7 @@ type HyperSkill struct {
 	Qualities  []*Quality
 	Dice       *DiePool
 	Effect     string
+	Apply      bool
 	CostPerDie int
 	Cost       int
 }
