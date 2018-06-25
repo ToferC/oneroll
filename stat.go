@@ -98,14 +98,6 @@ func (hs HyperStat) String() string {
 		hs.CostPerDie,
 		hs.Cost)
 
-	for _, q := range hs.Qualities {
-		text += fmt.Sprintf("%s\n", q)
-	}
-
-	if hs.Effect != "" {
-		text += fmt.Sprintf("Effect: %s", hs.Effect)
-	}
-
 	return text
 }
 
