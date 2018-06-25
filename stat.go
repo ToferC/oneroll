@@ -113,9 +113,9 @@ func (s *Statistic) CalculateCost() {
 	for _, m := range s.Modifiers {
 		m.CalculateCost(0)
 		if m.RequiresLevel {
-			b += m.CostPerLevel * m.Level
+			mc += m.CostPerLevel * m.Level
 		} else {
-			b += m.CostPerLevel
+			mc += m.CostPerLevel
 		}
 	}
 
@@ -136,7 +136,7 @@ func (s *Statistic) CalculateCost() {
 // CalculateCost generates and udpates the cost for HypeSKills
 func (hs *HyperStat) CalculateCost() {
 
-	b := 4
+	b := 4 // Base Cost
 
 	for _, q := range hs.Qualities {
 
