@@ -182,7 +182,7 @@ func (r *Roll) ParseString(input string) (int, int, int, int, int, int, int, int
 
 	errString := ""
 
-	sElements = strings.SplitN(input, "+", 9)
+	sElements = strings.SplitN(input, "+", 8)
 
 	var nd, hd, wd, ed, gf, sp int
 
