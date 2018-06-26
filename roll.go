@@ -49,6 +49,22 @@ func (d DiePool) String() string {
 		text += fmt.Sprintf("%dhd", d.Hard)
 	}
 
+	if d.Normal > 0 && d.Expert {
+		text += "+"
+	}
+
+	if d.Expert {
+		text += fmt.Sprint("1ed")
+	}
+
+	if d.Normal > 0 && d.Master {
+		text += "+"
+	}
+
+	if d.Master {
+		text += fmt.Sprint("1md")
+	}
+
 	if (d.Hard > 0 && d.Wiggle > 0) || (d.Normal > 0 && d.Wiggle > 0 && d.Hard == 0) {
 		text += "+"
 	}
