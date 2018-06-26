@@ -271,35 +271,51 @@ func (r *Roll) parseDieRoll() *Roll {
 // VerifyLessThan10 checks and reduces die pools to less than 10d
 func (r *Roll) verifyLessThan10() {
 
-	if r.DiePool.Normal+r.DiePool.Hard+r.DiePool.Wiggle > 10 {
+	if SumDice(r.DiePool) > 10 {
 
 		fmt.Println("Error: Can't roll more than 10 dice. Reducing to less than 10.")
-		fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd.\n",
+		fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd+default%ded.\n",
 			r.DiePool.Normal,
 			r.DiePool.Hard,
 			r.DiePool.Wiggle,
+			r.DiePool.Expert,
 		))
 
 		// Remove normal dice first
-		for r.DiePool.Normal > 0 && r.DiePool.Normal+r.DiePool.Hard+r.DiePool.Wiggle > 10 {
+		for r.DiePool.Normal > 0 && SumDice(r.DiePool) > 10 {
 			fmt.Printf("reduced Normal dice from %d to %d. \n",
 				r.DiePool.Normal,
 				r.DiePool.Normal-1,
 			)
 			r.DiePool.Normal--
-			fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd.\n",
+			fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd+default%ded.\n",
 				r.DiePool.Normal,
 				r.DiePool.Hard,
-				r.DiePool.Wiggle))
+				r.DiePool.Wiggle,
+				r.DiePool.Expert))
 		}
 
 		// Reduce hard dice next
-		for r.DiePool.Hard > 0 && r.DiePool.Normal+r.DiePool.Hard+r.DiePool.Wiggle > 10 {
+		for r.DiePool.Hard > 0 && SumDice(r.DiePool) > 10 {
 			fmt.Printf("reduced Hard dice from %d to %d. \n",
 				r.DiePool.Hard,
 				r.DiePool.Hard-1,
 			)
 			r.DiePool.Hard--
+			fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd+default%ded.\n",
+				r.DiePool.Normal,
+				r.DiePool.Hard,
+				r.DiePool.Wiggle,
+				r.DiePool.Expert))
+		}
+
+		// Reduce expert dice next
+		for r.DiePool.Expert > 0 && SumDice(r.DiePool) > 10 {
+			fmt.Printf("reduced Expert dice from %d to %d. \n",
+				1,
+				0,
+			)
+			r.DiePool.Expert = 0
 			fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd.\n",
 				r.DiePool.Normal,
 				r.DiePool.Hard,
@@ -307,7 +323,7 @@ func (r *Roll) verifyLessThan10() {
 		}
 
 		// Reduce wiggle dice last
-		for r.DiePool.Wiggle > 0 && r.DiePool.Normal+r.DiePool.Hard+r.DiePool.Wiggle > 10 {
+		for r.DiePool.Wiggle > 0 && SumDice(r.DiePool) > 10 {
 			fmt.Printf("reduced Wiggle dice from %d to %d. \n",
 				r.DiePool.Wiggle,
 				r.DiePool.Wiggle-1,
