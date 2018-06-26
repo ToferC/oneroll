@@ -145,9 +145,11 @@ func (c *Character) CalculateCost() {
 
 	var cost int
 
-	if len(c.Archetype.Sources) > 0 {
-		UpdateCost(c.Archetype)
-		cost += c.Archetype.Cost
+	if c.Setting != "RE" {
+		if len(c.Archetype.Sources) > 0 {
+			UpdateCost(c.Archetype)
+			cost += c.Archetype.Cost
+		}
 	}
 
 	for _, stat := range c.Statistics {
@@ -181,7 +183,7 @@ func (c *Character) CalculateCost() {
 
 	calcBaseWill := 0
 
-	if c.BaseWill > 0 {
+	if c.Setting != "RE" {
 		for _, stat := range c.Statistics {
 			if stat.EffectsWill {
 				calcBaseWill += SumDice(stat.Dice)
@@ -199,6 +201,5 @@ func (c *Character) CalculateCost() {
 			cost += c.Willpower - c.BaseWill
 		}
 	}
-
 	c.PointCost = cost
 }
