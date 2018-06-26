@@ -106,17 +106,19 @@ func (s *Skill) FormatDiePool(actions int) string {
 
 	normal := stat.Normal + skill.Normal
 	hard := stat.Hard + skill.Hard
+	expert := skill.Expert
 	wiggle := stat.Wiggle + skill.Wiggle
 	goFirst := Max(stat.GoFirst, skill.GoFirst)
 	spray := Max(stat.Spray, skill.Spray)
 
-	text := fmt.Sprintf("%dac+%dd+%dhd+%dwd+%dgf+%dsp",
+	text := fmt.Sprintf("%dac+%dd+%dhd+%dwd+%dgf+%dsp+%ded",
 		actions,
 		normal,
 		hard,
 		wiggle,
 		goFirst,
-		spray)
+		spray,
+		expert)
 
 	return text
 }
@@ -191,6 +193,10 @@ func (s *Skill) CalculateCost() {
 	total := b * s.Dice.Normal
 	total += b * 2 * s.Dice.Hard
 	total += b * 4 * s.Dice.Wiggle
+
+	if s.Dice.Expert > 0 {
+		total += 2
+	}
 
 	s.Cost = total
 }

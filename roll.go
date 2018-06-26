@@ -28,8 +28,7 @@ type DiePool struct {
 	Normal  int
 	Hard    int
 	Wiggle  int
-	Expert  bool
-	Master  bool
+	Expert  int
 	Spray   int
 	GoFirst int
 }
@@ -49,20 +48,12 @@ func (d DiePool) String() string {
 		text += fmt.Sprintf("%dhd", d.Hard)
 	}
 
-	if d.Normal > 0 && d.Expert {
+	if d.Normal > 0 && d.Expert > 0 {
 		text += "+"
 	}
 
-	if d.Expert {
-		text += fmt.Sprint("1ed")
-	}
-
-	if d.Normal > 0 && d.Master {
-		text += "+"
-	}
-
-	if d.Master {
-		text += fmt.Sprint("1md")
+	if d.Expert > 0 {
+		text += fmt.Sprintf("%ded", 1)
 	}
 
 	if (d.Hard > 0 && d.Wiggle > 0) || (d.Normal > 0 && d.Wiggle > 0 && d.Hard == 0) {
@@ -114,7 +105,7 @@ func (r *Roll) Resolve(input string) (*Roll, error) {
 
 	r.Input = input
 
-	nd, hd, wd, gf, sp, ac, _, err := r.ParseString(input)
+	nd, hd, wd, ed, gf, sp, ac, _, err := r.ParseString(input)
 
 	r.NumActions = ac
 
@@ -122,6 +113,7 @@ func (r *Roll) Resolve(input string) (*Roll, error) {
 		Normal:  nd,
 		Hard:    hd,
 		Wiggle:  wd,
+		Expert:  ed,
 		GoFirst: gf,
 		Spray:   sp,
 	}
@@ -168,6 +160,10 @@ func (r *Roll) Resolve(input string) (*Roll, error) {
 		r.Results = append(r.Results, 10)
 	}
 
+	if r.DiePool.Expert > 0 {
+		r.Results = append(r.Results, r.DiePool.Expert)
+	}
+
 	r.parseDieRoll()
 
 	// Sort roll by initiative (width+GoFirst) and then height
@@ -178,7 +174,7 @@ func (r *Roll) Resolve(input string) (*Roll, error) {
 }
 
 // ParseString parses string like 5d+1hd+1wd or returns error
-func (r *Roll) ParseString(input string) (int, int, int, int, int, int, int, error) {
+func (r *Roll) ParseString(input string) (int, int, int, int, int, int, int, int, error) {
 
 	re := regexp.MustCompile("[0-9]+")
 
@@ -186,9 +182,9 @@ func (r *Roll) ParseString(input string) (int, int, int, int, int, int, int, err
 
 	errString := ""
 
-	sElements = strings.SplitN(input, "+", 7)
+	sElements = strings.SplitN(input, "+", 9)
 
-	var nd, hd, wd, gf, sp int
+	var nd, hd, wd, ed, gf, sp int
 
 	ac, nr := 1, 1
 
@@ -201,6 +197,10 @@ func (r *Roll) ParseString(input string) (int, int, int, int, int, int, int, err
 		case strings.Contains(s, "hd"):
 			numString := re.FindString(s)
 			hd, _ = strconv.Atoi(numString)
+
+		case strings.Contains(s, "ed"):
+			numString := re.FindString(s)
+			ed, _ = strconv.Atoi(numString)
 
 		case strings.Contains(s, "d"):
 			numString := re.FindString(s)
@@ -233,10 +233,10 @@ func (r *Roll) ParseString(input string) (int, int, int, int, int, int, int, err
 	}
 
 	if errString != "" {
-		return 0, 0, 0, 0, 0, 0, 0, errors.New(errString)
+		return 0, 0, 0, 0, 0, 0, 0, 0, errors.New(errString)
 	}
 
-	return nd, hd, wd, gf, sp, ac, nr, nil
+	return nd, hd, wd, ed, gf, sp, ac, nr, nil
 }
 
 // Determine matches including width, height and initiative for a roll
