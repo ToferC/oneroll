@@ -10,7 +10,7 @@ func NewReignCharacter(name string) *Character {
 	c.Setting = "RE"
 
 	// WTStats sets the order for Character.Statistics
-	c.StatMap = []string{"Body", "Coordination", "Sense", "knowledge", "Command", "Charm"}
+	c.StatMap = []string{"Body", "Coordination", "Sense", "Knowledge", "Command", "Charm"}
 
 	c.Statistics = map[string]*Statistic{
 		"Body": &Statistic{
@@ -195,8 +195,6 @@ func NewReignCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
-			ReqSpec:        true,
-			Specialization: "Sword",
 		},
 		// Coordination Skills
 		"Climb": &Skill{
