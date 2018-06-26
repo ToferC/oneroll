@@ -181,21 +181,23 @@ func (c *Character) CalculateCost() {
 
 	calcBaseWill := 0
 
-	for _, stat := range c.Statistics {
-		if stat.EffectsWill {
-			calcBaseWill += SumDice(stat.Dice)
-			if stat.HyperStat != nil {
-				calcBaseWill += SumDice(stat.HyperStat.Dice)
+	if c.BaseWill > 0 {
+		for _, stat := range c.Statistics {
+			if stat.EffectsWill {
+				calcBaseWill += SumDice(stat.Dice)
+				if stat.HyperStat != nil {
+					calcBaseWill += SumDice(stat.HyperStat.Dice)
+				}
 			}
 		}
-	}
 
-	if !c.InPlay {
-		c.BaseWill = calcBaseWill
-		c.Willpower = calcBaseWill
-	} else {
-		cost += 3*c.BaseWill - calcBaseWill
-		cost += c.Willpower - c.BaseWill
+		if !c.InPlay {
+			c.BaseWill = calcBaseWill
+			c.Willpower = calcBaseWill
+		} else {
+			cost += 3*c.BaseWill - calcBaseWill
+			cost += c.Willpower - c.BaseWill
+		}
 	}
 
 	c.PointCost = cost
