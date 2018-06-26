@@ -22,6 +22,8 @@ type Character struct {
 	Permissions  map[string]*Permission
 	Powers       map[string]*Power
 	HitLocations map[string]*Location
+	Passions     []*Passion
+	Advantages   []*Advantage
 	LocationMap  []string
 	PointCost    int
 	InPlay       bool
@@ -35,6 +37,13 @@ type Update struct {
 	ChangeFrom string
 	ChangeTo   string
 	Cost       int
+}
+
+// Passion represents loyalties or drives
+type Passion struct {
+	Type        string
+	Description string
+	Value       int
 }
 
 // Display character
