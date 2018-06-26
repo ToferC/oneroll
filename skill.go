@@ -80,6 +80,7 @@ func (s *Skill) getDiePool() *DiePool {
 		td.Normal = s.Dice.Normal + s.HyperSkill.Dice.Normal
 		td.Hard = s.Dice.Hard + s.HyperSkill.Dice.Hard
 		td.Wiggle = s.Dice.Wiggle + s.HyperSkill.Dice.Wiggle
+		td.Expert = s.HyperSkill.Dice.Expert
 
 		for _, q := range s.HyperSkill.Qualities {
 			for _, m := range q.Modifiers {
