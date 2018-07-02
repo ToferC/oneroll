@@ -208,7 +208,7 @@ func (c *Character) CalculateCost() {
 			// Auto-calculate base costs and levels
 			c.BaseWill = calcBaseWill
 			c.Willpower = c.BaseWill
-			baseWillCost += 3*c.BaseWill - calcBaseWill
+			baseWillCost += 3 * (c.BaseWill - calcBaseWill)
 			willpowerCost += c.Willpower - c.BaseWill
 		}
 	}
