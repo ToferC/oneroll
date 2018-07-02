@@ -33,8 +33,13 @@ func (s Skill) String() string {
 
 	td := ReturnDice(&s)
 
-	text := fmt.Sprintf("%s ",
-		s.Name)
+	text := ""
+
+	if s.HyperSkill != nil {
+		text += fmt.Sprintf("%s* ", s.Name)
+	} else {
+		text = fmt.Sprintf("%s ", s.Name)
+	}
 
 	if s.ReqSpec {
 		text += fmt.Sprintf("[%s] ", s.Specialization)
