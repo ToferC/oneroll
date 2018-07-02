@@ -204,10 +204,13 @@ func (c *Character) CalculateCost() {
 			}
 		}
 
-		if !c.InPlay {
-			// Auto-calculate base costs and levels
+		if c.BaseWill == 0 {
+			// Auto-calculate base costs and levels for base character
 			c.BaseWill = calcBaseWill
 			c.Willpower = c.BaseWill
+		}
+
+		if !c.InPlay {
 			baseWillCost += 3 * (c.BaseWill - calcBaseWill)
 			willpowerCost += c.Willpower - c.BaseWill
 		}
