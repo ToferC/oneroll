@@ -15,6 +15,7 @@ type Skill struct {
 	Specialization string
 	HyperSkill     *HyperSkill
 	Modifiers      []*Modifier
+	Free           bool
 	Cost           int
 }
 
@@ -166,8 +167,13 @@ func ShowSkills(c *Character, allSkills bool) string {
 // Called from Character.CalculateCharacterCost()
 func (s *Skill) CalculateCost() {
 
+	var b int
+
 	// Base Cost
-	b := 2
+	if !s.Free {
+		b = 2
+	}
+
 	// Modifier Cost
 	mc := 0
 
