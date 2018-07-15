@@ -32,7 +32,7 @@ func main() {
 		Name:       "Hyper-Body",
 		Level:      3,
 		CostPerDie: 2,
-		Modifiers:  []*oneroll.Modifier{boost1, bgf},
+		Modifiers:  []*oneroll.Modifier{&boost1, &bgf},
 	}
 
 	c.Statistics["Body"].HyperStat = &oneroll.HyperStat{
@@ -49,7 +49,7 @@ func main() {
 		Type:      "Useful",
 		Name:      "Hyper-Athletics",
 		Level:     1,
-		Modifiers: []*oneroll.Modifier{baseW, bgf},
+		Modifiers: []*oneroll.Modifier{&baseW, &bgf},
 	}
 
 	c.Skills["Athletics"].Dice.Normal = 3
@@ -67,7 +67,7 @@ func main() {
 
 	body := c.Statistics["Body"]
 
-	body.Modifiers = append(body.Modifiers, bgf)
+	body.Modifiers = append(body.Modifiers, &bgf)
 
 	f := oneroll.NewPower("Telekinisis")
 
@@ -93,7 +93,7 @@ func main() {
 		Name:       "TK Blast",
 		Level:      3,
 		CostPerDie: 2,
-		Modifiers:  []*oneroll.Modifier{area, ifthen},
+		Modifiers:  []*oneroll.Modifier{&area, &ifthen},
 	}
 
 	rng := oneroll.Capacity{
@@ -115,7 +115,7 @@ func main() {
 		Name:       "Fly",
 		Level:      1,
 		CostPerDie: 2,
-		Modifiers:  []*oneroll.Modifier{gf, boost},
+		Modifiers:  []*oneroll.Modifier{&gf, &boost},
 	}
 
 	u.Capacities = []*oneroll.Capacity{
