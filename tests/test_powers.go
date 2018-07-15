@@ -9,11 +9,15 @@ import (
 func main() {
 	c := oneroll.NewWTCharacter("Deacon")
 
+	s1 := oneroll.Sources["Genetic"]
+	s2 := oneroll.Sources["Technological"]
+
+	p1 := oneroll.Permissions["Super"]
+
 	c.Archetype = &oneroll.Archetype{
-		Type: "Cadaver",
-		Sources: []*oneroll.Source{oneroll.Sources["Genetic"],
-			oneroll.Sources["Technological"]},
-		Permissions: []*oneroll.Permission{oneroll.Permissions["Super"]},
+		Type:        "Cadaver",
+		Sources:     []*oneroll.Source{&s1, &s2},
+		Permissions: []*oneroll.Permission{&p1},
 	}
 
 	oneroll.UpdateCost(c.Archetype)
