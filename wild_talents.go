@@ -150,6 +150,7 @@ func NewWTCharacter(name string) *Character {
 				Hard:   0,
 				Wiggle: 0,
 			},
+			Broad: true,
 		},
 		"Block": &Skill{
 			Name: "Block",
@@ -163,6 +164,7 @@ func NewWTCharacter(name string) *Character {
 				Hard:   0,
 				Wiggle: 0,
 			},
+			Broad: true,
 		},
 		"Brawling": &Skill{
 			Name: "Brawling",
@@ -176,6 +178,7 @@ func NewWTCharacter(name string) *Character {
 				Hard:   0,
 				Wiggle: 0,
 			},
+			Broad: true,
 		},
 		"Endurance": &Skill{
 			Name: "Endurance",
@@ -189,6 +192,7 @@ func NewWTCharacter(name string) *Character {
 				Hard:   0,
 				Wiggle: 0,
 			},
+			Broad: true,
 		},
 		"Melee Weapon": &Skill{
 			Name: "Melee Weapon",
@@ -217,6 +221,7 @@ func NewWTCharacter(name string) *Character {
 				Normal: 0,
 				Hard:   0,
 			},
+			Broad: true,
 		},
 		"Driving": &Skill{
 			Name: "Driving",
@@ -257,6 +262,7 @@ func NewWTCharacter(name string) *Character {
 				Normal: 0,
 				Hard:   0,
 			},
+			Broad: true,
 		},
 		// Sense Skills
 		"Empathy": &Skill{
@@ -269,6 +275,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		"Perception": &Skill{
 			Name: "Perception",
@@ -280,6 +287,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		"Scrutiny": &Skill{
 			Name: "Scrutiny",
@@ -291,6 +299,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		// Mind Skills
 		"First Aid": &Skill{
@@ -303,6 +312,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		"Knowledge": &Skill{
 			Name: "Knowledge",
@@ -340,6 +350,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		"Navigation": &Skill{
 			Name: "Navigation",
@@ -351,6 +362,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		"Research": &Skill{
 			Name: "Research",
@@ -362,6 +374,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		"Security Systems": &Skill{
 			Name: "Security Systems",
@@ -373,6 +386,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		"Streetwise": &Skill{
 			Name: "Streetwise",
@@ -384,6 +398,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		"Survival": &Skill{
 			Name: "Survival",
@@ -395,6 +410,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		"Tactics": &Skill{
 			Name: "Tactics",
@@ -406,6 +422,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		// Charm Skills
 		"Lie": &Skill{
@@ -418,6 +435,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		"Performance": &Skill{
 			Name: "Performance",
@@ -442,6 +460,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		// Command Skills
 		"Interrogation": &Skill{
@@ -454,6 +473,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		"Intimidation": &Skill{
 			Name: "Intimidation",
@@ -465,6 +485,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		"Leadership": &Skill{
 			Name: "Leadership",
@@ -476,6 +497,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 		"Stability": &Skill{
 			Name: "Stability",
@@ -487,6 +509,7 @@ func NewWTCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
+			Broad: true,
 		},
 	}
 
