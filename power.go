@@ -140,18 +140,18 @@ func (p *Power) DeterminePowerCapacities() {
 			// Get final value
 			finalVal := float64(modVal) * boosterVal
 
-			if finalVal > 1000.0 {
+			if finalVal > 1000 {
 				switch {
 				case c.Type == "Range":
-					finalVal = finalVal / 1000.0
+					finalVal = finalVal / 1000
 					measure = "km"
-					c.Value = fmt.Sprintf("%.2f%s", finalVal, measure)
+					c.Value = fmt.Sprintf("%.0f%s", finalVal, measure)
 				case c.Type == "Mass":
-					finalVal = finalVal / 1000.0
+					finalVal = finalVal / 1000
 					measure = "tons"
-					c.Value = fmt.Sprintf("%.2f%s", finalVal, measure)
+					c.Value = fmt.Sprintf("%.0f%s", finalVal, measure)
 				case c.Type == "Speed":
-					finalVal = finalVal / 1000.0
+					finalVal = finalVal / 1000
 					measure = "km"
 					c.Value = fmt.Sprintf("%.2f%s", finalVal, measure)
 				case c.Type == "Self":
@@ -161,7 +161,7 @@ func (p *Power) DeterminePowerCapacities() {
 				}
 			} else {
 				measure = measuresMap[c.Type]
-				c.Value = fmt.Sprintf("%.0f%s", finalVal, measure)
+				c.Value = fmt.Sprintf("%.0f %s", finalVal, measure)
 			}
 		} // End Capacities
 	} // End Qualities
