@@ -134,7 +134,7 @@ func (p *Power) DeterminePowerCapacities() {
 			// Apply booster
 			for _, m := range q.Modifiers {
 				if m.Name == "Booster" {
-					boosterVal = float64(math.Pow10(m.Level)) * 10.0
+					boosterVal = math.Pow10(m.Level) * 10
 				}
 			}
 			// Get final value
