@@ -1,6 +1,9 @@
 package oneroll
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 // Power is a non-standard ability or miracle
 type Power struct {
@@ -100,6 +103,7 @@ func (p *Power) DeterminePowerCapacities() {
 		"Range": 10.0,
 		"Speed": 2.50,
 		"Self":  0.0,
+		"Touch": 0.0,
 	}
 
 	measuresMap := map[string]string{
@@ -107,6 +111,7 @@ func (p *Power) DeterminePowerCapacities() {
 		"Range": "m",
 		"Speed": "m",
 		"Self":  "",
+		"Touch": "",
 	}
 
 	var measure string
@@ -129,7 +134,7 @@ func (p *Power) DeterminePowerCapacities() {
 			// Apply booster
 			for _, m := range q.Modifiers {
 				if m.Name == "Booster" {
-					boosterVal = float64(m.Level) * 10.0
+					boosterVal = float64(math.Pow10(m.Level)) * 10.0
 				}
 			}
 			// Get final value
@@ -151,6 +156,8 @@ func (p *Power) DeterminePowerCapacities() {
 					c.Value = fmt.Sprintf("%.2f%s", finalVal, measure)
 				case c.Type == "Self":
 					c.Value = "Self"
+				case c.Type == "Touch":
+					c.Value = "Touch"
 				}
 			} else {
 				measure = measuresMap[c.Type]
